@@ -3,13 +3,15 @@
 (function(root){
   const PRESETS = {
     luftbild:{label:'Luftbild',layers:['ch.swisstopo.swissimage'],opaque:true},
-    gewaesser:{label:'Gewässer',layers:['ch.swisstopo.swisstlm3d-gewaessernetz']},
+    gewaesser:{label:'Gewässer',layers:['ch.swisstopo.vec200-hydrography']},
+    gewaesser_alle:{label:'Gewässer · detailliert',layers:['ch.swisstopo.swisstlm3d-gewaessernetz']},
     verkehr:{label:'Verkehrswege',layers:['ch.swisstopo.swisstlm3d-strassen','ch.swisstopo.swisstlm3d-eisenbahnnetz','ch.swisstopo.swisstlm3d-uebrigerverkehr']},
     gemeinden:{label:'Gemeindegrenzen',layers:['ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill']},
     siedlungen:{label:'Siedlungsflächen',layers:['ch.are.siedlung']},
     orte:{label:'Ortschaften',layers:['ch.swisstopo.vec200-names-namedlocation']},
     bauten:{label:'Bauten',layers:['ch.swisstopo.vec25-gebaeude','ch.swisstopo.vec25-anlagen','ch.swisstopo.vec25-einzelobjekte']},
-    uebersicht:{label:'Landeskarte',layers:['ch.swisstopo.swisstlm3d-karte-farbe'],opaque:true}
+    uebersicht:{label:'Landeskarte',layers:['ch.swisstopo.swisstlm3d-karte-farbe'],opaque:true},
+    historisch:{label:'Historische Karte (Zeitreise)',layers:['ch.swisstopo.zeitreihen'],opaque:true}
   };
   // Quoted CSV fields, CRLF, embedded separators, escaped double quotes.
   function csvRows(text, delimiter){
@@ -89,11 +91,16 @@
     }
     return out;
   }
-  function wmsUrl(id,tile){
+  function wmsUrl(id,tile, options={}){
     if(!Object.hasOwn(PRESETS,id))throw Error('Unbekannte Kartenebene: '+id);
     const layer=PRESETS[id];const p=new URLSearchParams({SERVICE:'WMS',REQUEST:'GetMap',VERSION:'1.3.0',
       LAYERS:layer.layers.join(','),STYLES:'',CRS:'EPSG:2056',BBOX:tile.bbox.map(n=>n.toFixed(5)).join(','),
       WIDTH:String(tile.w),HEIGHT:String(tile.h),FORMAT:'image/png',TRANSPARENT:layer.opaque?'FALSE':'TRUE',LANG:'de'});
+    if(id==='historisch'){
+      const y=Number(options.year);
+      if(!Number.isInteger(y)||y<1844||y>2026)throw Error('Historisches Jahr muss zwischen 1844 und 2026 liegen.');
+      p.set('TIME',`${y}-12-31`);
+    }
     return 'https://wms.geo.admin.ch/?'+p.toString();
   }
   function solve8(rows,vector){
@@ -150,7 +157,32 @@
     write32(end,12,offset-centralStart);write32(end,16,centralStart);push(end);
     return new Blob(out,{type:'application/zip'});
   }
-  const exported={PRESETS,parseLayoutCsv,dimensions,tiles,wmsUrl,homography,cssPerspective,crc32,storeZip};
+  function whiteReliefBackground(ids){
+    return !ids.includes('luftbild') && !ids.includes('uebersicht') && !ids.includes('historisch');
+  }
+  // Render a municipality Polygon/MultiPolygon as an objectBoundingBox SVG clipping path.
+  // LV95 coordinates are transformed to north-up normalised image coordinates.
+  function geojsonClipPath(geometry,bbox){
+    if(!geometry || !['Polygon','MultiPolygon'].includes(geometry.type))throw Error('Gemeindegrenze hat kein Polygonformat.');
+    const [west,south,east,north]=bbox;
+    const polygons=geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates;
+    let count=0;
+    const commands=[];
+    for(const poly of polygons){
+      for(const ring of poly){
+        if(!Array.isArray(ring)||ring.length<4)continue;
+        const path=ring.map((point,i)=>{
+          if(!Array.isArray(point)||!Number.isFinite(point[0])||!Number.isFinite(point[1]))throw Error('Ungültige LV95-Grenzkoordinate.');
+          const x=(point[0]-west)/(east-west), y=(north-point[1])/(north-south);
+          return `${i===0?'M':'L'}${x.toFixed(7)} ${y.toFixed(7)}`;
+        }).join(' ')+' Z';
+        commands.push(path);count++;
+      }
+    }
+    if(!count)throw Error('Die Gemeindegrenze ist leer.');
+    return commands.join(' ');
+  }
+  const exported={PRESETS,parseLayoutCsv,dimensions,tiles,wmsUrl,homography,cssPerspective,crc32,storeZip,whiteReliefBackground,geojsonClipPath};
   root.GrossreliefCore=exported;
   if(typeof module!=='undefined'&&module.exports)module.exports=exported;
 })(typeof globalThis!=='undefined'?globalThis:this);
