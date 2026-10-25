@@ -1,13 +1,12 @@
-# Grossrelief-Kartenprojektor v5.9.4
+# Grossrelief-Kartenprojektor v5.9.6 – isolierte Gewässerkorrektur
 
-Basis: v5.9.3. **Ausschliesslich zwei Änderungen an Gewässerdaten:**
+**Ausgangsversion:** v5.9.5. Ausschliesslich Gewässer-Ladeprozess korrigiert.
 
-1. **Reidbachweiher** wird zusätzlich ausdrücklich als benannte **Wasserfläche** aus dem bereits verwendeten kantonalen WFS-Layer `WB_WASSERRECHTE_F` (GIS-ZH 51.1) akzeptiert. Genau dieser Weiher – keine anderen neuen Weiher.
-2. **Krebsbach** wird ergänzend als namentlich **exakt Krebsbach** bezeichnete amtliche Linie aus überkantonalen Geodaten gesucht (swisstopo GeoAdmin; falls nicht verfügbar: amtlicher WFS Kanton Schwyz). Der Krebsbach fliesst vom Hüttnerseeli über Schwyz nach Bäch/Zürichsee. Der bisherige ZH-WFS erfasst seine Schwyzer Abschnitte nicht. **Chrebsbach** und andere Nebenbäche werden ausdrücklich ausgeschlossen. Amtliche Bachlinien werden nicht frei verlängert oder durch Seen gezeichnet.
+- Zürichsee/Seeflächen, Sihl und alle übrigen bereits bestätigten Wasserläufe werden direkt aus den ursprünglichen amtlichen Daten angezeigt.
+- Eine zusätzliche Krebsbachprüfung darf die Grundkarte **niemals** zurückhalten, leeren oder verändern. Sie läuft separat und darf nur den Krebsbach aktualisieren.
+- Eine zusätzliche nationale Anfrage darf nur **Sihl**-Geometrien anhand des exakten Namens ergänzen. Keine namenlosen Bachläufe und kein anderes Gewässer.
+- Keine synthetischen Sihl- oder Krebsbach-Verbindungen. Bei unvollständiger amtlicher Datenlage wird der fehlende Verlauf diagnostiziert, nicht erfunden.
+- UI, neun Tasten, Vier-Ecken-Kalibrierung, Export, bestehende Positivliste und alle übrigen Layer unverändert.
+- Exakte Programmversion im Seitentitel und Untertitel: **v5.9.6**.
 
-Die Datenquellen liefern im Browser unterschiedliche Verfügbarkeit. Wird der vollständige Verlauf nicht geliefert, zeigt die App nur tatsächlich belegte Teilstücke – **keine erfundenen Linien**. Live-Abfragen der externen Quellen sind in dieser Entwicklungsumgebung nicht prüfbar.
-
-Alle übrigen Bach-/Weiherlisten und Kartenebenen bleiben identisch zu v5.9.3. Versionsnummer v5.9.4 auch im Untertitel. 
-
-## GitHub Pages
-ZIP entpacken, gesamten Inhalt ins bestehende Repository hochladen. Dateien von v5.9.3 müssen nicht gelöscht werden, solange index.html v5.9.4 lädt. Nach Commit Strg+F5.
+**Hinweis:** Reale Live-Antworten der Schweizer Kartendienste konnten im Ausführungssystem nicht abgerufen werden. Funktionstests mit lokalen Daten prüfen die Unabhängigkeit der Grundkarte und das Filterverhalten, nicht die geografische Vollständigkeit der externen Daten.
