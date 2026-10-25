@@ -1,6 +1,6 @@
-# Grossrelief-Kartenprojektor v5.8 – strikte Gewässerauswahl
+# Grossrelief-Kartenprojektor v5.9 – strikte Gewässerauswahl
 
-GitHub-Pages-App ohne Backend. Die bisherige Version zeigte zu viele Bäche, weil sie immer die vollständige swissTLM3D-WMS-Gewässerkarte darstellte. **Version 5.8 verwendet im Gewässermodus ausschliesslich 16 ausdrücklich ausgewählte Gewässergeometrien.** Eine Fehlersituation führt niemals zur ungefilterten WMS-Wasserkarte zurück.
+GitHub-Pages-App ohne Backend. Die bisherige Version zeigte zu viele Bäche, weil sie immer die vollständige swissTLM3D-WMS-Gewässerkarte darstellte. **Version 5.9 verwendet im Gewässermodus ausschliesslich 16 ausdrücklich ausgewählte Gewässergeometrien.** Eine Fehlersituation führt niemals zur ungefilterten WMS-Wasserkarte zurück.
 
 ## Sichtbar sind ausschliesslich
 
@@ -25,7 +25,7 @@ Im Projektormodus: Taste 3 schaltet Gewässer, Taste 7 schaltet Namen. Mehrfacha
 
 ## Installation
 
-ZIP entpacken und **alle** Dateien samt `data/` nach GitHub hochladen. `index.html` liegt im Repo-Stammverzeichnis. GitHub Pages unter `Settings → Pages` aktivieren. Die neuen v5.8-Dateinamen helfen, alte Browser-Caches auszuschliessen.
+ZIP entpacken und **alle** Dateien samt `data/` nach GitHub hochladen. `index.html` liegt im Repo-Stammverzeichnis. GitHub Pages unter `Settings → Pages` aktivieren. Die neuen v5.9-Dateinamen helfen, alte Browser-Caches auszuschliessen.
 
 Datenquellen: swisstopo (Hintergrund-/Sachkarten), OpenStreetMap/Overpass (selektierte Gewässergeometrien, ODbL). Vor einer abschliessenden Unterrichtsvorlage sollten alle ausgewählten Wasserobjekte überprüft werden.
 
