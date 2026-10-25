@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.7</title>
-  <link rel="stylesheet" href="./style.v5.7.css">
-  <script defer src="./core.v5.7.js"></script>
-  <script defer src="./special.v5.7.js"></script>
-  <script defer src="./app.v5.7.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.8</title>
+  <link rel="stylesheet" href="./style.v5.8.css">
+  <script defer src="./core.v5.8.js"></script>
+  <script defer src="./special.v5.8.js"></script>
+  <script defer src="./app.v5.8.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -78,13 +78,15 @@
       <div id="layerList" class="layerlist"></div>
       <div id="dataQuality" class="hint" role="status" aria-live="polite" hidden></div>
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
-      <label class="fieldlabel hydroMode">Gewässerdarstellung
-        <select id="waterDetail">
-          <option value="liste" selected>Einheitliches Gewässernetz (swissTLM3D)</option>
-          <option value="wichtig">Vereinfachte Übersicht (swissTLMRegio)</option>
-        </select>
-        <small>Das amtliche swisstopo-Gewässernetz wird immer zuerst gezeichnet. Benannte Gewässer werden darüber hervorgehoben. Fällt die Namenssuche aus, bleibt das amtliche Gewässernetz erhalten; fällt auch swisstopo aus, erscheint eine deutliche Fehlermeldung.</small>
-      </label>
+      <div class="hint hydroMode"><strong>Gewässer: ausschliesslich 16 ausgewählte Seen und Bäche.</strong>
+        Keine zusätzlichen Rinnsale, keine überlagerten Gewässernetze. Nicht verfügbare Verläufe werden ausdrücklich gemeldet.</div>
+      <select id="waterDetail" hidden><option value="liste" selected>Nur ausgewählte Gewässer</option></select>
+      <div class="buttoncolumn" id="waterDataTools">
+        <button class="button ghost" type="button" id="saveWaterGeojson">↓ Geladene Gewässer als GeoJSON sichern</button>
+        <label class="button ghost inputlabel" for="loadWaterGeojson">↑ Gesicherte Gewässer-Geometrien laden</label>
+        <input id="loadWaterGeojson" type="file" accept=".geojson,.json,application/geo+json,application/json" hidden>
+        <small class="hint">Eine geprüfte GeoJSON unter <code>data/selected-waters.geojson</code> im Repository macht die Darstellung unabhängig von der Online-Gewässersuche. Die Datei enthält echte Koordinaten, keine von der App erfundenen Verläufe.</small>
+      </div>
       <div class="hydroNames"><details><summary>16 ausgewählte Gewässer anzeigen</summary><p>Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.</p><p>Bäche: Sihl, Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.</p></details></div>
       <label class="fieldlabel nameSize">Schriftgrösse der Namensebene <strong id="labelSizeValue">30 px</strong>
         <input id="labelSize" type="range" min="22" max="48" value="30" step="2">

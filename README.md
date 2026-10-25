@@ -1,28 +1,32 @@
-# Grossrelief-Kartenprojektor v5.7 — Gewässer ohne Doppelzeichnung
+# Grossrelief-Kartenprojektor v5.8 – strikte Gewässerauswahl
 
-**Fehlerkorrektur gegenüber v5.6:** Bisher wurden zwei swisstopo-Layer verschiedener Generalisierungsstufen und zusätzlich einzelne Gewässergeometrien aufeinandergelegt. Das führte zu doppelt gezeichneten Flüssen und Bächen sowie unterschiedlichen Blautönen.
+GitHub-Pages-App ohne Backend. Die bisherige Version zeigte zu viele Bäche, weil sie immer die vollständige swissTLM3D-WMS-Gewässerkarte darstellte. **Version 5.8 verwendet im Gewässermodus ausschliesslich 16 ausdrücklich ausgewählte Gewässergeometrien.** Eine Fehlersituation führt niemals zur ungefilterten WMS-Wasserkarte zurück.
 
-## Neue, verbindliche Darstellung
+## Sichtbar sind ausschliesslich
 
-- Es wird **genau ein** amtlicher Gewässer-Layer gezeichnet, nicht mehrere.
-- Standard: `ch.swisstopo.swisstlm3d-gewaessernetz` (swissTLM3D) — enthält Wasserläufe und Seeumrisse.
-- Option **Vereinfachte Übersicht**: `ch.swisstopo.vec200-hydrography` (swissTLMRegio).
-- Fällt die gewählte Quelle aus oder liefert nur leere Kartenbilder, wird die **gesamte** Gewässerkarte durch die andere Quelle ersetzt, niemals überlagert.
-- Wenn beide amtlichen Quellen ausfallen, kann eine geprüfte Teilmenge der benannten OSM-Gewässer als **alleinige** Ersatzkarte angezeigt werden. Die unvollständige Abdeckung wird ausdrücklich gemeldet.
-- Die Suche nach einzelnen benannten Gewässern dient im Normalfall ausschliesslich als mögliche Quelle für **Namenspositionen** (Taste 7), nicht für eine zweite, anders gezeichnete Gewässergeometrie.
-- Diese Änderung gilt auch für den **PNG-/ZIP-Export**.
+**Seen/Weiher:** Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.
 
-**Grenze:** Der amtliche WMS-Layer ist ein vollständiges Gewässernetz, nicht eine gefilterte Liste von 17 Gewässern. Die strikte, ortsgenaue Begrenzung auf die vom Nutzer gewünschten Wasserläufe benötigt separate geprüfte, deduplizierte Vektordaten. Die aktuelle v5.7 behauptet diese Filterung ausdrücklich nicht. Der WMS-Dienst und der Projektor können offline nicht live geprüft werden.
+**Fliessgewässer:** Sihl, Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.
 
-## Alle übrigen Funktionen bleiben
+Die Wasserläufe kommen aus gezielt abgefragten, benannten OpenStreetMap-Vektoren (Overpass), nicht aus dem vollständigen swisstopo-WMS-Bild. Der gesamte Reliefausschnitt wird aus der CSV berechnet. Die Namen-Ebene (Taste 7) zeigt für Wasser nur Namen der Auswahl. Es gibt kein paralleles Overlay mit einer weiteren Gewässerkarte.
 
-- Zwei Kartenmodi: Heute und Historisch
-- CSV-Import zur Ermittlung der Relief-Gesamtfläche, eigene Kartenbilder hochladen
-- Kartenebenen 1–9 im Projektormodus unabhängig ein- und ausschaltbar
-- Vier-Ecken-Kalibrierung, Esc zurück zum Startmenü, schmale Werkzeugleiste
-- Weiss beleuchteter Reliefhintergrund ohne Luftbild/Landeskarte
-- Gemeinde-Wädenswil-Maske, Namen/Flurnamen, Kartenexport (sofern CORS erlaubt)
+## Datenverlässlichkeit und Offline-Nutzung
 
-## GitHub Pages
+- Nach erstmaligem erfolgreichem Laden werden die echten Wassergeometrien automatisch im Browser (IndexedDB) gespeichert. Bei späterem Öffnen können sie wiederverwendet werden.
+- **Geometrien als GeoJSON sichern:** Der Button erzeugt `selected-waters.geojson` mit LV95-Koordinaten, vollständiger Quellangabe sowie einer Liste fehlender Objekte.
+- **Dauerhaft auf GitHub nutzen:** Sobald die Gewässerdatei in der App geprüft wurde, die heruntergeladene Datei unter `data/selected-waters.geojson` ins Repository hochladen und die mitgelieferte leere Vorlage ersetzen. Danach wird diese verifizierte lokale Datei beim nächsten Aufruf bevorzugt geladen.
+- **GeoJSON importieren:** Eine bereits gespeicherte, zu derselben CSV passende Datei kann direkt importiert werden.
+- Bei einem nicht gefundenen Gewässer zeigt die App explizit die fehlenden Namen. Sie zeichnet weder erfundene Linien noch sämtliche anderen Rinnsale.
+- **Wichtig:** Eine garantierte Darstellung aller 16 Gewässer ohne Onlinezugriff besteht erst, wenn ihre geprüften Geometrien vollständig in dieser Datei vorhanden sind. Die mitgelieferte Vorlage enthält absichtlich keine ausgedachten Koordinaten. Ohne verfügbare Geometrie meldet die App einen Fehler; es wird keine falsche Karte als korrekt ausgegeben.
 
-Den Inhalt des ZIP-Archivs in das Stammverzeichnis des bestehenden Repositories hochladen und die gleichnamigen Dateien ersetzen. Auch `index.html` aktualisieren. Skript-/CSS-Dateien heissen absichtlich `*.v5.7.*`, um Browser-Caching mit früheren Versionen auszuschliessen.
+## Steuerung
+
+Im Projektormodus: Taste 3 schaltet Gewässer, Taste 7 schaltet Namen. Mehrfachauswahl, weisse Grundbeleuchtung, Wädenswil-Maske, historischer Modus, vier verschiebbare Ecken und Esc bleiben bestehen.
+
+## Installation
+
+ZIP entpacken und **alle** Dateien samt `data/` nach GitHub hochladen. `index.html` liegt im Repo-Stammverzeichnis. GitHub Pages unter `Settings → Pages` aktivieren. Die neuen v5.8-Dateinamen helfen, alte Browser-Caches auszuschliessen.
+
+Datenquellen: swisstopo (Hintergrund-/Sachkarten), OpenStreetMap/Overpass (selektierte Gewässergeometrien, ODbL). Vor einer abschliessenden Unterrichtsvorlage sollten alle ausgewählten Wasserobjekte überprüft werden.
+
+**Pflichtgewässer:** Wenn Zürichsee, Sihl oder Hüttnersee nicht als Vektorgeometrie gefunden werden, erscheint im Projektor eine deutliche Warnung. Die App kennzeichnet unvollständige Daten, ohne zufällige Bachläufe hinzuzufügen.
