@@ -1,51 +1,34 @@
-# Grossrelief-Kartenprojektor v5.6 – GitHub Pages
+# Grossrelief-Kartenprojektor v5.7 – vollständige amtliche Bachachsen
 
-**Voraussetzung:** Nur `layout.csv` laden, um die Karte für das gesamte Relief aus swisstopo-/Zürcher Geodaten zu erzeugen. Bestehende Kartenbilder lassen sich weiterhin unabhängig davon hochladen. Reine HTML/JavaScript-Anwendung auf GitHub Pages, kein eigener Server.
+## Ziel und Abgrenzung
 
-## Version 5.6: weitere Gewässer, Weiher und Sihl
+Gegenüber der Version 5.6 war ein zentraler Fehler in der Datenauswahl vorhanden: Sie verwendete fast immer **nur die namentlich beschrifteten Teilabschnitte** (GIS-ZH 45.3). Die **vollständige Gewässerachse** (GIS-ZH 45.2) wurde bislang nur für die Sihl ergänzt. Dadurch zeigten die Karten zwischen Oberlauf, Unterlauf und Seeufer grosse Lücken – genau wie in den vom Benutzer rot markierten Stellen.
 
-Die in Version 5.5 bereits funktionierenden Gewässer und die genaue Zürichsee-Uferlinie bleiben bestehen. Neu durchsucht die App den amtlichen WFS des Kantons Zürich zusätzlich nach:
+**Korrektur:** Die amtliche Gewässernummer (`gewaessernummer`) verbindet ab jetzt **alle angeforderten Bachnamen** mit **allen amtlichen Routenabschnitten derselben Nummer**. Es werden keine handgezeichneten Linien, keine künstlichen Brücken und keine fremden Bachläufe eingefügt. Die vier bisher richtigen Bäche und das präzise Zürichseeufer bleiben erhalten.
 
-**Bachläufen:** Zopfbach, Gulmenbach, Töbelibach, Untermosenbach, Reidbach/Riedbach/Wildbach, Teufenbach, Sihl, Krebsbach, Schlossbach, Sagenbach, Miesbach. Aabach und Meilibach bleiben als bisher unterstützte Namen dabei.
+**Mülibach Richterswil**, einschliesslich Auslauf zum Zürichsee: zusätzlich mit **Gewässernummer 2512** erfasst. Quelle: Amtlicher Gewässerraumplan Richterswil, https://www.richterswil.ch/_docn/6196924/20250909_Richterswil_Gew%C3%A4sserraumfestlegung_Plan_Nr.9_M%C3%BClibach_Hafenbach.pdf . Das stützt sich auf den amtlichen Wasserlauf und ist keine manuelle Gerade zum Ufer.
 
-**Stehgewässern:** Sternenweiher, Reidbachweiher/Riedbachweiher, Teufenbachweiher. Sie werden als Gewässerflächen aus `WB_STEHGEWAESSER_F` gezeichnet, nicht als Bachlinien. Der Kartendienst kann Gewässer unter anderen Namen führen oder bestimmte Kleinstweiher nicht enthalten. Keine Geometrien werden erfunden.
+**Krebsbach ist nicht Chrebsbach.** Reidbach/Riedbach/Wildbach sind als Namensvarianten weiterhin verfügbar. Ebenso bleiben Sternenweiher, Reidbachweiher und Teufenbachweiher als stehende Gewässer erhalten (soweit vom Dienst geliefert).
 
-**Wichtige Unterscheidung:** `Krebsbach` wird **nicht** mit `Chrebsbach` gleichgesetzt. Die Namensprüfung vergleicht normalisierte ganze Gewässerbezeichnungen, nicht Textteile.
+## Realitätskontrolle
 
-**Sihl:** Die App lädt mehrere benannte Teilstücke und versucht zusätzlich, anhand der kantonalen Gewässernummer weitere amtliche Achsen aus `WB_FLIESSGEWAESSER_L_M` hinzuzufügen. Das verbessert die Vollständigkeit innerhalb des Ausschnitts. Für die über Kantons- oder Datensatzgrenzen hinausreichenden Strecken garantiert der kantonale Dienst alleine keine Vollständigkeit. Die Startansicht zeigt die Anzahl erkannter Sihl-Segmente.
+Die Startansicht zeigt ab v5.7:
+- Anzahl nachgewiesener Bachgruppen aus dem WFS (Name gefunden)
+- Anzahl davon mit **amtlichen Routengeometrien** (Gewässernummer verknüpft)
+- Zahl der vollständigen Sihl-Abschnitte
+- Zahl der Mülibach-Achsenabschnitte (Nr. 2512) sowie automatisch errechnete Entfernung ihrer Endpunkte zur Zürichsee-Uferlinie – kein künstliches Verbinden
+- Namen tatsächlich noch fehlender Gewässer
 
-Die Gewässer-Diagnose zeigt nun **Bäche x/13, Weiher x/3 und Sihl-Teilstücke**. Sie zählt nur die tatsächlich vom kantonalen WFS zurückgelieferten Geometrien. Fehlende Bezeichnungen bleiben als fehlend erkennbar.
+Achtung: Das Vorliegen einer Achse garantiert keine perfekte Darstellung **über Kantonsgrenzen hinaus**. Der Liveabruf des kantonalen WFS ist in der Entwicklungsumgebung nicht möglich. Der Join und die Darstellung wurden mit Testdaten geprüft. Für die endgültige Kontrolle bitte die eigene GitHub-Pages-Seite mit `layout.csv` testen.
 
-## Datenquellen / Originale
+## Aktualisieren
 
-- Kanton Zürich, **GIS-ZH Nr. 45.3** (`WB_GEWAESSERBEZEICHNUNG_L`): Fliessgewässer mit amtlichen Namen
-- Kanton Zürich, **GIS-ZH Nr. 45.2** (`WB_FLIESSGEWAESSER_L_M`): vollständige amtliche Fliessgewässerachsen mit Gewässernummern
-- Kanton Zürich, **GIS-ZH Nr. 45.10** (`WB_STEHGEWAESSER_F`): amtliche Seen- und Weiherflächen
-- Kanton Zürich, **GIS-ZH Nr. 45.13**: detaillierte Uferlinie Zürichsee
-- API: https://maps.zh.ch/wfs/OGDZHWFS
-- Datensatz: https://geolion.zh.ch/geodatensatz/743
+Das ZIP entpacken, **alle Dateien** ins Hauptverzeichnis des bestehenden GitHub-Repos laden und committen. Die neue `index.html` verweist ausschliesslich auf `core.v5.7.js`, `hydro.v5.7.js`, `app.v5.7.js` und `style.v5.7.css`. Danach Strg+F5.
 
-Keine generalisierte vec200-Uferlinie. Wenn der kantonale WFS ausfällt, zeigt die App ausdrücklich die Fehlermeldung und verwendet als Ersatz das bestehende detaillierte swissTLM3D-Wasserlayer (mit potentiell vielen Rinnsalen).
+Sonstige Bedienung bleibt gleich: 1 Luftbild, 2 Landeskarte, 3 Gewässer, 4–9 weitere Kartenebenen; jede Taste unabhängig an/aus. Vier-Ecken-Projektorkalibrierung, weisser Untergrund, Historisch und Download bleiben erhalten.
 
-## Bedienung
+## Technische Tests
 
-1. `layout.csv` hochladen.
-2. Modus **Heute** und Karte **3 – Gewässer** aktivieren. Die zusätzlichen Gewässer erscheinen automatisch, sofern ihre amtlichen Geometrien geliefert werden.
-3. Rechts im Startmenü unter *Gewässerdarstellung* den Diagnose-Text prüfen. Es erscheint die Anzahl erkannter Bäche, Weiher und Sihl-Segmente.
-4. Projektormodus öffnen, vier Ecken einstellen; Ebenen mit **1–9 unabhängig ein/aus** schalten. `Esc` führt zurück zum Hauptmenü.
-5. Kartenbilder als PNG oder ZIP herunterladen, einschliesslich der offiziellen Vektorgeometrien, die tatsächlich geladen wurden.
-
-Luftbild/Landeskarte, weisse Relief-Grundbeleuchtung, Wald, historische Karten, Wädenswil-Gemeindemaske, Vier-Ecken-Perspektive sowie die schmale rechte Bedienleiste bleiben unverändert.
-
-## GitHub aktualisieren
-
-ZIP entpacken und **alle Dateien und Ordner** direkt ins bisherige Repository hochladen. `index.html` muss im Repository-Stammverzeichnis liegen und verweist auf `core.v5.6.js`, `hydro.v5.6.js`, `app.v5.6.js`, `style.v5.6.css`. Änderungen committen und GitHub Pages mit `Strg + F5` laden. Alte Skripte dürfen liegen bleiben, werden aber nicht mehr verwendet.
-
-## Tests und Grenzen
-
-- `node tests/core.test.js` – CSV, Geometrie, Perspektive, Karte und WMS.
-- `node tests/test_hydro_v56.js` – Bachnamen, Reidbach/Wildbach, Krebsbach ≠ Chrebsbach, drei Weiher und mehrteilige Sihl.
-- `python tests/test_v56_browser.py` – Chromium mit simulierten WFS-/WMS-Antworten, kalibrierbare Anzeige, Mehrfachauswahl, PNG-Download.
-- `python tests/test_fallback_browser.py` – Ausfall des kantonalen WFS.
-
-**Offene Live-Prüfung:** Die tatsächliche Zahl der neu gefundenen Weiher und Sihl-Teilstücke lässt sich erst nach Veröffentlichung gegen den Zürcher WFS feststellen. Die Entwicklungstests beweisen die Funktionen, nicht die Vollständigkeit der serverseitigen Daten.
+- `node tests/core.test.js`
+- `node tests/test_hydro_v57.js`
+- `python tests/test_v57_browser.py` (simulierte WFS-/WMS-Antworten)
