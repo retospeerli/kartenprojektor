@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grossrelief · Kartenprojektor v5.2</title>
-  <link rel="stylesheet" href="./style.v5.3.css">
-  <script defer src="./core.v5.3.js"></script>
-  <script defer src="./special.v5.3.js"></script>
-  <script defer src="./app.v5.3.js"></script>
+  <link rel="stylesheet" href="./style.v5.4.css">
+  <script defer src="./core.v5.4.js"></script>
+  <script defer src="./special.v5.4.js"></script>
+  <script defer src="./app.v5.4.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -76,6 +76,7 @@
       <p class="hint">Swisstopo-Ebenen und hochgeladene Bilder erscheinen gemeinsam. Mehrfachauswahl: Jede Karte unabhängig ein- und ausschalten; im Projektor auch mit Tasten 1–9.</p>
       <div class="subheading">Aus CSV erzeugte swisstopo-Karten</div>
       <div id="layerList" class="layerlist"></div>
+      <div id="dataQuality" class="hint" role="status" aria-live="polite" hidden></div>
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
       <label class="fieldlabel hydroMode">Gewässerdarstellung
         <select id="waterDetail">
@@ -83,13 +84,13 @@
           <option value="wichtig">swisstopo · generalisierte Gewässer</option>
           <option value="alle">swisstopo · sämtliche Kleingewässer</option>
         </select>
-        <small>Die feste Auswahl nutzt nach Namen gefilterte Vektorgeometrien (OpenStreetMap); nicht auffindbare Gewässer werden nicht erfunden. Die übrigen Karten sind swisstopo.</small>
+        <small>Die Auswahl nutzt benannte Vektorgeometrien. Fällt die externe Abfrage aus, zeigt die App sichtbar gekennzeichnet das generalisierte Gewässernetz von swisstopo statt einer leeren weissen Fläche.</small>
       </label>
       <div class="hydroNames"><details><summary>15 ausgewählte Gewässer anzeigen</summary><p>Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.</p><p>Bäche: Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.</p></details></div>
       <label class="fieldlabel nameSize">Schriftgrösse der Namensebene <strong id="labelSizeValue">30 px</strong>
         <input id="labelSize" type="range" min="22" max="48" value="30" step="2">
       </label>
-      <label class="boundaryToggle"><input id="flurNames" type="checkbox" checked> <span><strong>Flurnamen mitbeschriften</strong><small>19 Grundwörter · Beschriftungen zusätzlich zu den aktiven Themen. Lesbarkeit hat Vorrang, überlappende Namen werden ausgelassen.</small></span></label>
+      <label class="boundaryToggle"><input id="flurNames" type="checkbox" checked> <span><strong>Flurnamen mitbeschriften</strong><small>Zusätzliche Flur- und Lokalnamen aus swissNAMES3D für den ganzen Reliefausschnitt. Gut lesbare, nicht überlappende Beschriftungen haben Vorrang.</small></span></label>
       <button class="minilink" id="downloadGlossary" type="button">↓ Flurnamen-Glossar als CSV für Arbeitsblätter</button>
       <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>

@@ -1,4 +1,4 @@
-# Grossrelief-Kartenprojektor v5.3 — GitHub Pages
+# Grossrelief-Kartenprojektor v5.4 — GitHub Pages
 
 Browser-App ohne Python und ohne Server. Sie nutzt `layout.csv` des Reliefgenerators für einen einzigen LV95-Kartenausschnitt über das gesamte Relief. Alternativ können Kartenbilder (PNG/JPG/WebP) hochgeladen und projektiv kalibriert werden. Die Modi **Heute/Historisch**, die Wädenswil-Gemeindemaske, Bildexporte und die Vier-Ecken-Kalibrierung bleiben erhalten.
 
@@ -6,7 +6,7 @@ Browser-App ohne Python und ohne Server. Sie nutzt `layout.csv` des Reliefgenera
 
 1. ZIP entpacken und **alle** Dateien samt Unterordnern ins Stammverzeichnis deines GitHub-Repositories hochladen.
 2. Gleichnamige `index.html`, `README.md` und Beispiel-/Testdateien ersetzen.
-3. Wichtig: `index.html` lädt die neu benannten Dateien `core.v5.3.js`, `special.v5.3.js`, `app.v5.3.js`, `style.v5.3.css`. Auch diese hochladen; alte Versionen dürfen liegen bleiben.
+3. Wichtig: `index.html` lädt die neu benannten Dateien `core.v5.4.js`, `special.v5.4.js`, `app.v5.4.js`, `style.v5.4.css`. Auch diese hochladen; alte Versionen dürfen liegen bleiben.
 4. Unter `Settings → Pages` muss der Branch `main`, Verzeichnis `/ (root)` aktiv sein. Die veröffentlichte Seite mit Strg+F5 aktualisieren.
 
 ## Neue Tastenbelegung (Projektormodus »Heute«)
@@ -52,7 +52,7 @@ Als Alternativen bleiben die bisherigen swisstopo-WMS-Ebenen »generalisierte Ge
 
 ## Flurnamen als Unterrichtsmaterial
 
-Die 19 Grundwörter mit Bedeutungen und den genannten Beispielen sind in `special.v5.3.js` hinterlegt. Mit **»Flurnamen-Glossar als CSV«** kann die Tabelle direkt als Unterrichts-Arbeitsgrundlage heruntergeladen werden (Excel/LibreOffice-kompatibel).
+Die 19 Grundwörter mit Bedeutungen und den genannten Beispielen sind in `special.v5.4.js` hinterlegt. Mit **»Flurnamen-Glossar als CSV«** kann die Tabelle direkt als Unterrichts-Arbeitsgrundlage heruntergeladen werden (Excel/LibreOffice-kompatibel).
 
 ## Technik / Grenzen
 
@@ -74,3 +74,13 @@ Die 19 Grundwörter mit Bedeutungen und den genannten Beispielen sind in `specia
 ## Tests
 
 `node tests/core.test.js` für Kernlogik, `python tests/browser_v5_3.py` für Chromium-Integration mit **simulierten externen Antworten**. Bei diesen Tests wird kein echter swisstopo-/Overpass-Dienst aufgerufen. Die Live-Verfügbarkeit muss auf der veröffentlichten GitHub-Pages-Seite geprüft werden.
+
+
+## Version 5.4 – Behebung der weissen Gewässer / fehlenden Namen
+
+- Die 15 ausgewählten Gewässer werden zuerst wie bisher als benannte Vektorgeometrien abgefragt. Ist das nicht möglich, zeigt die App **sichtbar gekennzeichnet** das generalisierte offizielle Gewässernetz von swisstopo als Notlösung – dieses enthält dann zusätzliche Gewässer.
+- Bei teilweise gefundenen Gewässern nennt die App die fehlenden Namen, statt vollständige Ergebnisse vorzutäuschen.
+- Namenssuche fragt swissNAMES3D via den offiziellen GeoAdmin SearchServer in einem 3×4 Raster für den gesamten CSV-Ausschnitt ab, ergänzt um gezielte Namensabfragen.
+- Die Beschriftung hängt weiterhin von den eingeschalteten Ebenen ab. Der bisherige willkürliche Grenzwert von 52 Namen wurde entfernt; trotzdem können wegen der physischen Lesbarkeit auf 40×60 cm weiterhin Namen unterdrückt werden.
+- Eine sichtbare Rückmeldung zeigt, wie viele Namen erkannt und projiziert werden.
+- **Live-Datenprüfung offen:** Die Entwicklungsumgebung erlaubt keine Netzwerkaufrufe. Externe GeoAdmin-/Overpass-Anfragen können deshalb erst auf der veröffentlichten App vollständig getestet werden.
