@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.10</title>
-  <link rel="stylesheet" href="./style.v5.10.css">
-  <script defer src="./core.v5.10.js"></script>
-  <script defer src="./special.v5.10.js"></script>
-  <script defer src="./app.v5.10.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.2</title>
+  <link rel="stylesheet" href="./style.v5.3.css">
+  <script defer src="./core.v5.3.js"></script>
+  <script defer src="./special.v5.3.js"></script>
+  <script defer src="./app.v5.3.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -79,13 +79,13 @@
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
       <label class="fieldlabel hydroMode">Gewässerdarstellung
         <select id="waterDetail">
-          <option value="liste" selected>Exakt nur diese 10 Gewässer</option>
-          <option value="wichtig">Nicht verwenden</option>
-          <option value="alle">Nicht verwenden</option>
+          <option value="liste" selected>Nur deine 15 Seen, Weiher und Bäche</option>
+          <option value="wichtig">swisstopo · generalisierte Gewässer</option>
+          <option value="alle">swisstopo · sämtliche Kleingewässer</option>
         </select>
-        <small>Es werden strikt nur diese 10 Gewässer gezeichnet: Zürichsee, Hüttenersee, Ausee, Teufenbachweiher, Sihl, Aabach, Gulmenbach, Meilibach, Riedbach und Zopfbach. Andere Rinnsale bleiben aus.</small>
+        <small>Die feste Auswahl nutzt nach Namen gefilterte Vektorgeometrien (OpenStreetMap); nicht auffindbare Gewässer werden nicht erfunden. Die übrigen Karten sind swisstopo.</small>
       </label>
-      <div class="hydroNames"><details><summary>10 ausgewählte Gewässer anzeigen</summary><p>Gewässer: Zürichsee, Hüttenersee, Ausee, Teufenbachweiher, Sihl, Aabach, Gulmenbach, Meilibach, Riedbach und Zopfbach.</p></details></div>
+      <div class="hydroNames"><details><summary>15 ausgewählte Gewässer anzeigen</summary><p>Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.</p><p>Bäche: Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.</p></details></div>
       <label class="fieldlabel nameSize">Schriftgrösse der Namensebene <strong id="labelSizeValue">30 px</strong>
         <input id="labelSize" type="range" min="22" max="48" value="30" step="2">
       </label>
