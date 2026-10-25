@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.8</title>
-  <link rel="stylesheet" href="./style.v5.8.css">
-  <script defer src="./core.v5.8.js"></script>
-  <script defer src="./hydro.v5.8.js"></script>
-  <script defer src="./app.v5.8.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.9</title>
+  <link rel="stylesheet" href="./style.v5.9.css">
+  <script defer src="./core.v5.9.js"></script>
+  <script defer src="./hydro.v5.9.js"></script>
+  <script defer src="./app.v5.9.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -77,17 +77,9 @@
       <div class="subheading">Aus CSV erzeugte swisstopo-Karten</div>
       <div id="layerList" class="layerlist"></div>
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
-      <label class="fieldlabel hydroMode">Gewässerdarstellung
-        <select id="waterDetail">
-          <option value="wichtig" selected>Amtliche Ufer + ausgewählte Bäche (empfohlen)</option>
-          <option value="alle">Detailliertes Gewässernetz (alle Bäche)</option>
-        </select>
-        <small>Hauptgewässer: präzise Seeufer und benannte Bachläufe aus amtlichen Vektordaten. Fallback: swissTLM3D mit zusätzlichen Rinnsalen.</small>
-      </label>
-      <label class="button ghost inputlabel" for="hydroFile" style="display:block;margin-top:8px;font-size:12px">↑ Amtliche Gewässer-GeoJSON laden (optional)</label>
-      <input id="hydroFile" type="file" accept=".geojson,.json,application/geo+json,application/json" hidden>
-      <p id="hydroStatus" class="hint" role="status">Gewässer-Geodaten für Seen, Weiher und ausgewählte Bäche werden beim Einschalten geprüft.</p>
-      <details id="hydroAudit" class="hydroAudit" hidden><summary>Gewässer einzeln kontrollieren</summary><div id="hydroAuditRows"></div></details>
+      <input type="hidden" id="waterDetail" value="wichtig">
+      <p class="hint" style="margin-top:14px"><strong>Gewässer – ausschliesslich die vereinbarte Auswahl.</strong> Keine weiteren Bäche oder Weiher, kein ungefiltertes Gewässernetz.</p>
+      <p id="hydroStatus" class="hint" role="status">Die namentlich ausgewählten Gewässer werden beim Einschalten aus amtlichen Daten geladen.</p>
       <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>
       <div id="uploadLayerList" class="layerlist uploadlist"></div>
