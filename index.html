@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.9</title>
-  <link rel="stylesheet" href="./style.v5.9.css">
-  <script defer src="./core.v5.9.js"></script>
-  <script defer src="./special.v5.9.js"></script>
-  <script defer src="./app.v5.9.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.10</title>
+  <link rel="stylesheet" href="./style.v5.10.css">
+  <script defer src="./core.v5.10.js"></script>
+  <script defer src="./special.v5.10.js"></script>
+  <script defer src="./app.v5.10.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -76,22 +76,20 @@
       <p class="hint">Swisstopo-Ebenen und hochgeladene Bilder erscheinen gemeinsam. Mehrfachauswahl: Jede Karte unabhängig ein- und ausschalten; im Projektor auch mit Tasten 1–9.</p>
       <div class="subheading">Aus CSV erzeugte swisstopo-Karten</div>
       <div id="layerList" class="layerlist"></div>
-      <div id="dataQuality" class="hint" role="status" aria-live="polite" hidden></div>
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
-      <div class="hint hydroMode"><strong>Gewässer: ausschliesslich 16 ausgewählte Seen und Bäche.</strong>
-        Keine zusätzlichen Rinnsale, keine überlagerten Gewässernetze. Nicht verfügbare Verläufe werden ausdrücklich gemeldet.</div>
-      <select id="waterDetail" hidden><option value="liste" selected>Nur ausgewählte Gewässer</option></select>
-      <div class="buttoncolumn" id="waterDataTools">
-        <button class="button ghost" type="button" id="saveWaterGeojson">↓ Geladene Gewässer als GeoJSON sichern</button>
-        <label class="button ghost inputlabel" for="loadWaterGeojson">↑ Gesicherte Gewässer-Geometrien laden</label>
-        <input id="loadWaterGeojson" type="file" accept=".geojson,.json,application/geo+json,application/json" hidden>
-        <small class="hint">Eine geprüfte GeoJSON unter <code>data/selected-waters.geojson</code> im Repository macht die Darstellung unabhängig von der Online-Gewässersuche. Die Datei enthält echte Koordinaten, keine von der App erfundenen Verläufe.</small>
-      </div>
-      <div class="hydroNames"><details><summary>16 ausgewählte Gewässer anzeigen</summary><p>Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.</p><p>Bäche: Sihl, Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.</p></details></div>
+      <label class="fieldlabel hydroMode">Gewässerdarstellung
+        <select id="waterDetail">
+          <option value="liste" selected>Exakt nur diese 10 Gewässer</option>
+          <option value="wichtig">Nicht verwenden</option>
+          <option value="alle">Nicht verwenden</option>
+        </select>
+        <small>Es werden strikt nur diese 10 Gewässer gezeichnet: Zürichsee, Hüttenersee, Ausee, Teufenbachweiher, Sihl, Aabach, Gulmenbach, Meilibach, Riedbach und Zopfbach. Andere Rinnsale bleiben aus.</small>
+      </label>
+      <div class="hydroNames"><details><summary>10 ausgewählte Gewässer anzeigen</summary><p>Gewässer: Zürichsee, Hüttenersee, Ausee, Teufenbachweiher, Sihl, Aabach, Gulmenbach, Meilibach, Riedbach und Zopfbach.</p></details></div>
       <label class="fieldlabel nameSize">Schriftgrösse der Namensebene <strong id="labelSizeValue">30 px</strong>
         <input id="labelSize" type="range" min="22" max="48" value="30" step="2">
       </label>
-      <label class="boundaryToggle"><input id="flurNames" type="checkbox" checked> <span><strong>Flurnamen mitbeschriften</strong><small>Zusätzliche Flur- und Lokalnamen aus swissNAMES3D für den ganzen Reliefausschnitt. Gut lesbare, nicht überlappende Beschriftungen haben Vorrang.</small></span></label>
+      <label class="boundaryToggle"><input id="flurNames" type="checkbox" checked> <span><strong>Flurnamen mitbeschriften</strong><small>19 Grundwörter · Beschriftungen zusätzlich zu den aktiven Themen. Lesbarkeit hat Vorrang, überlappende Namen werden ausgelassen.</small></span></label>
       <button class="minilink" id="downloadGlossary" type="button">↓ Flurnamen-Glossar als CSV für Arbeitsblätter</button>
       <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>
