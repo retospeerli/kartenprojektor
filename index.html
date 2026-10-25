@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grossrelief · Kartenprojektor v5.2</title>
+  <link rel="stylesheet" href="./style.v5.3.css">
+  <script defer src="./core.v5.3.js"></script>
+  <script defer src="./special.v5.3.js"></script>
+  <script defer src="./app.v5.3.js"></script>
+</head>
+<body>
+<svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
+<div class="app">
+  <aside class="sidebar">
+    <header class="identity">
+      <div class="brandmark">◈</div>
+      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor</span></div>
+    </header>
+
+    <h1>CSV laden<br><em>oder Kartenbilder wiederverwenden.</em></h1>
+    <p class="intro">Die App beherrscht zwei Arbeitswege: <b>layout.csv</b> laden und daraus neue swisstopo-Karten erzeugen, oder bereits vorhandene <b>PNG/JPG/WebP</b>-Kartenbilder hochladen und direkt auf das Relief projizieren.</p>
+
+    <section class="section">
+      <div class="sectiontitle"><span>01</span><h2>Neue Karten aus layout.csv</h2></div>
+      <p class="hint">Wenn du neue Karten erzeugen willst, ist der CSV-Upload zwingend. Die App berechnet daraus die Gesamtfläche des Reliefs und lädt passende swisstopo-Karten.</p>
+      <label class="filetarget" id="dropZoneCsv" for="layoutFile">
+        <span class="bigicon">↥</span>
+        <strong id="fileTitle">layout.csv auswählen</strong>
+        <small>Datei hierher ziehen oder anklicken</small>
+      </label>
+      <input id="layoutFile" type="file" accept=".csv,text/csv" hidden>
+      <button class="minilink" id="loadExample">Beispiel-CSV laden</button>
+      <div id="layoutInfo" class="layoutinfo" hidden>
+        <div class="layouthead"><span class="statuspill">✓ CSV erkannt</span><strong id="layoutName">–</strong></div>
+        <div class="metricline"><span>Segmente</span><b id="segments">–</b></div>
+        <div class="metricline"><span>Relief gesamt</span><b id="modelSize">–</b></div>
+        <div class="metricline"><span>Gebiet</span><b id="areaSize">–</b></div>
+        <details><summary>LV95-Koordinaten</summary><div id="coordinates" class="coords">–</div></details>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectiontitle"><span>02</span><h2>Vorhandene Kartenbilder hochladen</h2></div>
+      <p class="hint">Alternativ können bereits erzeugte Kartenbilder hochgeladen werden. Diese lassen sich später wieder verzerren und projizieren – auch ohne CSV.</p>
+      <label class="filetarget compact" id="dropZoneImages" for="imageFiles">
+        <span class="bigicon">🖼</span>
+        <strong>Kartenbilder auswählen</strong>
+        <small>PNG, JPG, JPEG oder WebP · mehrere Dateien möglich</small>
+      </label>
+      <input id="imageFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+      <div id="uploadInfo" class="uploadinfo muted">Noch keine Kartenbilder geladen.</div>
+    </section>
+
+    <section class="section">
+      <div class="sectiontitle"><span>03</span><h2>Projektionsmodus</h2></div>
+      <div class="modePicker" role="group" aria-label="Kartenmodus wählen">
+        <button id="modeToday" class="modeButton active" type="button" aria-pressed="true">Heute</button>
+        <button id="modeHistoric" class="modeButton" type="button" aria-pressed="false">Historisch</button>
+      </div>
+      <div id="todayOptions" class="modeOptions">
+        <label class="boundaryToggle"><input id="waedenswilOnly" type="checkbox"> <span><strong>Nur Gemeinde Wädenswil</strong><small>Alle Karten auf die heutige Gemeindegrenze beschränken (BFS 293). Der Rest des Reliefs bleibt weiss beleuchtet.</small></span></label>
+        <p id="boundaryStatus" class="hint" role="status">Gemeindegrenze wird beim Aktivieren direkt von geo.admin.ch geladen.</p>
+      </div>
+      <div id="historicOptions" class="modeOptions" hidden>
+        <label class="fieldlabel">Historisches Kartenjahr <strong id="historicYearLabel">1900</strong>
+          <input type="range" id="historicYear" min="1844" max="2026" step="1" value="1900">
+        </label>
+        <div class="yearPresets" id="yearPresets"></div>
+        <p class="hint">Swisstopo-Zeitreise (Dufour-, Siegfried- und Landeskarten). Historische Kartenstände können vom gewählten Jahr abweichen, wenn nicht jährlich neu kartiert wurde.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectiontitle"><span>04</span><h2>Karten ein-/ausblenden</h2></div>
+      <p class="hint">Swisstopo-Ebenen und hochgeladene Bilder erscheinen gemeinsam. Mehrfachauswahl: Jede Karte unabhängig ein- und ausschalten; im Projektor auch mit Tasten 1–9.</p>
+      <div class="subheading">Aus CSV erzeugte swisstopo-Karten</div>
+      <div id="layerList" class="layerlist"></div>
+      <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
+      <label class="fieldlabel hydroMode">Gewässerdarstellung
+        <select id="waterDetail">
+          <option value="liste" selected>Nur deine 15 Seen, Weiher und Bäche</option>
+          <option value="wichtig">swisstopo · generalisierte Gewässer</option>
+          <option value="alle">swisstopo · sämtliche Kleingewässer</option>
+        </select>
+        <small>Die feste Auswahl nutzt nach Namen gefilterte Vektorgeometrien (OpenStreetMap); nicht auffindbare Gewässer werden nicht erfunden. Die übrigen Karten sind swisstopo.</small>
+      </label>
+      <div class="hydroNames"><details><summary>15 ausgewählte Gewässer anzeigen</summary><p>Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.</p><p>Bäche: Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.</p></details></div>
+      <label class="fieldlabel nameSize">Schriftgrösse der Namensebene <strong id="labelSizeValue">30 px</strong>
+        <input id="labelSize" type="range" min="22" max="48" value="30" step="2">
+      </label>
+      <label class="boundaryToggle"><input id="flurNames" type="checkbox" checked> <span><strong>Flurnamen mitbeschriften</strong><small>19 Grundwörter · Beschriftungen zusätzlich zu den aktiven Themen. Lesbarkeit hat Vorrang, überlappende Namen werden ausgelassen.</small></span></label>
+      <button class="minilink" id="downloadGlossary" type="button">↓ Flurnamen-Glossar als CSV für Arbeitsblätter</button>
+      <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
+      <div class="subheading topgap">Hochgeladene Kartenbilder</div>
+      <div id="uploadLayerList" class="layerlist uploadlist"></div>
+      <div class="legend">© Bundesamt für Landestopografie swisstopo · eigene Kartenbilder bleiben lokal im Browser</div>
+    </section>
+
+    <section class="section">
+      <div class="sectiontitle"><span>05</span><h2>Verzerren & herunterladen</h2></div>
+      <p class="hint">Wichtig: Die Vier-Ecken-Kalibrierung verzerrt jedes sichtbare Kartenbild so, dass es auf das Relief projiziert werden kann.</p>
+      <label class="fieldlabel">Auflösung für Downloads (längere Seite)
+        <select id="exportSize">
+          <option value="1200">1200 px · klein</option>
+          <option value="2400" selected>2400 px · hoch</option>
+          <option value="3200">3200 px · detailliert</option>
+          <option value="4096">4096 px · maximal</option>
+        </select>
+      </label>
+      <div class="buttoncolumn">
+        <button id="downloadCurrent" class="button primary" disabled>↓ Sichtbare Karten als PNG</button>
+        <button id="downloadAll" class="button secondary" disabled>↓ Einzelkarten als ZIP</button>
+        <button id="saveCalibration" class="button ghost" disabled>↓ Kalibrierung als JSON</button>
+        <label class="button ghost inputlabel" for="calibrationFile">↑ Kalibrierung laden</label>
+        <input id="calibrationFile" type="file" accept=".json,application/json" hidden>
+      </div>
+    </section>
+
+    <footer>Reine GitHub-App ohne Server. CSV und hochgeladene Bilder werden lokal im Browser verarbeitet. Für neue swisstopo-Karten ist Internet erforderlich.</footer>
+  </aside>
+
+  <main class="main">
+    <div class="topline">
+      <div>
+        <div class="eyebrow">LIVE-VORSCHAU · RELIEF / BILDMODUS</div>
+        <h2>Projektionsfläche</h2>
+      </div>
+      <div id="status" class="status"><span class="dot"></span><span id="statusText">CSV laden oder Kartenbilder hochladen</span></div>
+    </div>
+
+    <div class="canvascontainer">
+      <div id="previewFrame" class="previewframe">
+        <div id="previewWhite" class="mapWhite" hidden></div>
+        <div id="previewTiles" class="previewTiles" hidden></div>
+        <div id="emptyPreview" class="emptyPreview">
+          <span>◈</span>
+          <strong>Projekt laden</strong>
+          <p>Variante A: <b>layout.csv</b> hochladen, um neue swisstopo-Karten zu erzeugen. Variante B: vorhandene Kartenbilder hochladen und später direkt verzerren.</p>
+        </div>
+        <div class="previewcorner tl">NW</div>
+        <div class="previewcorner tr">NE</div>
+        <div class="previewcorner br">SE</div>
+        <div class="previewcorner bl">SW</div>
+      </div>
+    </div>
+
+    <div class="underpreview">
+      <div>
+        <strong id="imageSize">–</strong>
+        <small id="modeInfo">Noch keine Relief- oder Bilddaten geladen</small>
+      </div>
+      <div class="horizontalbuttons">
+        <button id="reload" class="button ghost" disabled>↻ Swisstopo-Karten neu laden</button>
+        <button id="openProjector" class="button primary projectorbutton" disabled>▣ Projektor starten</button>
+      </div>
+    </div>
+
+    <div class="instructions">
+      <strong>Zielbild verzerren</strong>
+      <p>Mit <b>H</b> zwischen Heute und Historisch wechseln. Im Vollbild schaltet jede Taste <b>1–9</b> genau eine Kartenebene <b>ein oder aus</b>, ohne die anderen Ebenen zu verändern. <b>1–8</b> bleiben wie bisher, <b>9 = Wald</b>. Mehrere Ebenen können gleichzeitig sichtbar sein. Mit <b>K</b> die vier Kalibrierungspunkte einblenden und auf die Reliefecken ziehen, mit <b>T</b> die schmale Kartenleiste verbergen und mit <b>Esc</b> zur Startansicht zurückkehren.</p>
+    </div>
+  </main>
+</div>
+
+<section id="projector" class="projectorview" hidden aria-label="Projektion auf das Relief">
+  <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClip" clipPathUnits="objectBoundingBox"><path id="municipalPath" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
+  <div id="projectionWhite" class="mapWhite projectionWhite" hidden></div>
+  <div id="projectionTiles" class="projectionTiles"></div>
+  <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" hidden>
+    <polygon id="outline" points="" fill="none" stroke="#f3f9ee" stroke-width="2.5" stroke-dasharray="8 8" vector-effect="non-scaling-stroke"></polygon>
+  </svg>
+  <div id="handles" class="handles" hidden>
+    <div class="handle" data-index="0" tabindex="0" aria-label="Nordwest-Ecke verschieben">NW</div>
+    <div class="handle" data-index="1" tabindex="0" aria-label="Nordost-Ecke verschieben">NE</div>
+    <div class="handle" data-index="2" tabindex="0" aria-label="Südost-Ecke verschieben">SE</div>
+    <div class="handle" data-index="3" tabindex="0" aria-label="Südwest-Ecke verschieben">SW</div>
+  </div>
+
+  <!-- Schmale Projektor-Leiste: nur Kartenwahl, Kalibrierung und zurück. -->
+  <nav class="projectorRail" id="projectorDock" aria-label="Karten und Projektor-Steuerung">
+    <button type="button" class="railBack" id="exitProjector" title="Zurück zur Startansicht (Esc)" aria-label="Zum Hauptmenü zurückkehren">
+      <span aria-hidden="true">↩</span><small>Menü</small>
+    </button>
+    <div class="railTitle">Modus</div>
+    <div class="railModes"><button id="railToday" type="button" title="Aktuelle Karten (H)">Heute</button><button id="railHistoric" type="button" title="Historische Karten (H)">Früher</button></div>
+    <div id="railHistoricYear" class="railHistoricYear" hidden><span id="railYearValue">1900</span><div><button type="button" id="railYearBack" title="10 Jahre zurück">−10</button><button type="button" id="railYearForward" title="10 Jahre vorwärts">+10</button></div></div>
+    <div class="railTitle">Karten</div>
+    <div id="projectorLayers" class="projectorLayers"></div>
+    <div class="railPages" id="railPages" hidden>
+      <button id="prevPage" aria-label="Vorherige Kartenseite" title="Vorherige Kartenseite">‹</button>
+      <span id="pageIndicator">1/1</span>
+      <button id="nextPage" aria-label="Nächste Kartenseite" title="Nächste Kartenseite">›</button>
+    </div>
+    <div class="railBottom">
+      <button type="button" id="toggleHandles" class="railAction" title="Vier Ecken kalibrieren (K)">⌗<small>Ecken</small></button>
+      <button type="button" id="resetCorners" class="railAction" title="Kalibrierung zurücksetzen" hidden>↺<small>Reset</small></button>
+      <button type="button" id="toggleDock" class="railAction" title="Leiste ausblenden (T)">⇥<small>Leiste</small></button>
+    </div>
+  </nav>
+  <button type="button" id="showDock" class="showDock" title="Kartenleiste wieder anzeigen (T)" hidden aria-label="Kartenleiste zeigen">☰</button>
+  <div id="projectorError" class="projectorError" hidden></div>
+</section>
+</body>
+</html>
