@@ -1,86 +1,52 @@
-# Grossrelief-Kartenprojektor v5.4 — GitHub Pages
+# Grossrelief-Kartenprojektor v5.5 – GitHub Pages
 
-Browser-App ohne Python und ohne Server. Sie nutzt `layout.csv` des Reliefgenerators für einen einzigen LV95-Kartenausschnitt über das gesamte Relief. Alternativ können Kartenbilder (PNG/JPG/WebP) hochgeladen und projektiv kalibriert werden. Die Modi **Heute/Historisch**, die Wädenswil-Gemeindemaske, Bildexporte und die Vier-Ecken-Kalibrierung bleiben erhalten.
+Statische Web-App ohne Python und ohne Backend. Für neue Karten die `layout.csv` des Grossrelief-STL-Generators laden; sie legt die Gesamtfläche in LV95 fest. Vorhandene PNG/JPEG/WebP können zusätzlich oder auch ohne CSV importiert werden. Im Projektormodus bleiben die Vier-Ecken-Kalibrierung und die kleine Seitenleiste erhalten.
 
-## Installation und Aktualisierung
+## Installation
 
-1. ZIP entpacken und **alle** Dateien samt Unterordnern ins Stammverzeichnis deines GitHub-Repositories hochladen.
-2. Gleichnamige `index.html`, `README.md` und Beispiel-/Testdateien ersetzen.
-3. Wichtig: `index.html` lädt die neu benannten Dateien `core.v5.4.js`, `special.v5.4.js`, `app.v5.4.js`, `style.v5.4.css`. Auch diese hochladen; alte Versionen dürfen liegen bleiben.
-4. Unter `Settings → Pages` muss der Branch `main`, Verzeichnis `/ (root)` aktiv sein. Die veröffentlichte Seite mit Strg+F5 aktualisieren.
+1. Das ZIP entpacken und **sämtliche Dateien** ins Stammverzeichnis des bestehenden GitHub-Repositories hochladen, einschliesslich Unterordnern.
+2. `index.html` überschreiben. Sie verweist auf `core.v5.5.js`, `special.v5.5.js`, `app.v5.5.js` und `style.v5.5.css` – alle vier müssen mit hochgeladen werden. Alte versionsbenannte Skripte dürfen im Repository bleiben.
+3. GitHub Pages: `main` → `/ (root)`; nach erfolgreicher Veröffentlichung Seite mit Strg+F5 öffnen.
 
-## Neue Tastenbelegung (Projektormodus »Heute«)
+## Bedienung
 
-| Taste | Ebene |
-|---|---|
-| 1 | Luftbild |
-| 2 | Landeskarte |
-| 3 | Gewässer (Auswahl) |
-| 4 | Verkehrswege |
-| 5 | Gemeindegrenzen |
-| 6 | Siedlungsflächen |
-| 7 | **Namen** |
-| 8 | Gebäude / Kunstbauten |
-| 9 | Wald / Gehölze |
+Im Projektormodus schaltet **jede Zahl unabhängig** ihre Ebene ein oder aus: `1` Luftbild, `2` Landeskarte, `3` Gewässer, `4` Verkehr, `5` Gemeindegrenzen, `6` Siedlungen, `7` Namen, `8` Gebäude/Kunstbauten, `9` Wald/Gehölze. `K` zeigt/versteckt Kalibrierpunkte; `T` blendet die Seitenleiste aus; `Esc` führt zurück zum Hauptmenü. Die weisse Reliefbeleuchtung ist ohne Luftbild/Landeskarte automatisch aktiv. Weiterhin vorhanden: Heute/Historisch, Jahresauswahl, Maske „nur Gemeinde Wädenswil“, Bildexport und Druckvorlagen.
 
-Jede Taste schaltet **nur ihre Ebene** ein oder aus. Mehrere Ebenen bleiben gleichzeitig aktiv. Die schmale Leiste am Projektorrand bietet dieselben Schalter. `T` blendet die Leiste aus, `K` blendet die vier Kalibrierungspunkte ein/aus, `Esc` kehrt zur Startseite zurück.
+## Neu: acht benannte Wädenswiler Bäche
 
-## Bedingte Beschriftung der Ebenen
+Folgende **acht benannten Bachläufe** sind in der festen Gewässerauswahl enthalten:
 
-**7 Namen** ist jetzt eine eigene, transparent gerenderte Ebene (nicht mehr nur Ortsnamen aus einem fertigen WMS-Bild). Wenn Namen aktiv ist:
+**Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.**
 
-- Bei **3 Gewässer** werden die Namen der 15 ausgewählten Seen, Weiher und Bäche abgefragt.
-- Bei **9 Wald** werden die bekannten Wald-/Gehölznamen angezeigt, soweit georeferenziert.
-- Bei **6 Siedlungen** werden die Namen der Ortsteile und Siedlungen angezeigt, soweit georeferenziert.
-- Die **Flurnamen** sind zusätzlich über den eigenen Schalter in der Startansicht aktivierbar. Die 19 Grundwörter und ihre Beispiele stammen aus der bereitgestellten Liste.
+Zusätzlich gehören dazu die sieben gewünschten Seen/Weiher: Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.
 
-Namenpositionen werden über die öffentlich zugängliche **GeoAdmin-Suche (swissNAMES/gazetteer)** in LV95 ermittelt. Nur Treffer **innerhalb des CSV-Ausschnitts mit exakt übereinstimmendem Namen** werden angezeigt. Es werden keine Koordinaten erfunden. Mehrfach vorkommende/fehlende Namen können ausgelassen werden; Geocoder-Ergebnisse sollten bei einer Unterrichtsprojektion überprüft werden. Pro Darstellung werden maximal 52 überlappungsfrei platzierte Namen gezeigt; bei vielen Namen werden weitere aus Gründen der Lesbarkeit weggelassen.
+In `Gewässerdarstellung` **„15 ausgewählte Gewässer“** auswählen. Mit **3** werden die ermittelten Bachlinien/Seeflächen gezeichnet; mit **3 + 7** erscheinen auch die Namen, sofern sie ohne Überlappung auf dem ca. 40 × 60 cm grossen Relief platziert werden können. Die Bachlinien sind für die Projektion deutlich blau dargestellt.
 
-Die **Schriftgrösse** ist in der Startansicht einstellbar (22–48 px bezogen auf die 1400-px-Kartenvorschau). Standard: **30 px**, mit starkem hellem Umriss und thematischer Textfarbe. Die Schrift wird zusammen mit den Karten per Vier-Ecken-Transformation verzerrt; auch PNG-Export ist vorgesehen.
+Die Vektorabfrage ist jetzt toleranter: Namensvarianten (`name`, `name:de`, `alt_name`), einzeln erfasste Bachabschnitte und Wasserlauf-Relationen werden berücksichtigt. Als Beschriftungspositionen dienen bevorzugt offizielle swissNAMES-Orte; fehlen diese, wird ein Name nur dann über der Linie platziert, wenn die Geometrie tatsächlich gefunden wurde. Die App nennt explizit **die Anzahl der gefundenen Bäche und deren Namen** sowie fehlende Gewässer.
 
-**Hinweis:** Ist die Landeskarte (2) eingeschaltet, können zusätzlich deren fest ins Kartenbild gedruckte Beschriftungen erscheinen. Diese kann die App nicht unabhängig abstellen. Die grossen Namen der Ebene 7 liegen darüber.
+### Grenzen der Daten
 
-## Feste Gewässerliste
+Die Geometrien der namentlich ausgewählten Gewässer kommen aktuell weiterhin von OpenStreetMap/Overpass. Die amtliche swisstopo-WMS-Darstellung lässt sich nicht einfach anhand dieser 15 Namen filtern. **Nicht vorhandene Linienabschnitte werden nicht erfunden.** Liefert die Abfrage keine benannten Bäche, verwendet die App ersatzweise das **generalisierte swisstopo-Gewässernetz**, ausdrücklich als unselektierten Ersatz gekennzeichnet. In der Startansicht können alternativ alle swisstopo-Bäche ausgewählt werden. Das ist kein garantiertes Einzeichnen aller acht Bäche; die Vollständigkeit hängt von den öffentlich verfügbaren Geometriedaten ab.
 
-**Seen / Weiher (7):** Zürichsee, Hüttnersee, Ausee, Sternenweiher, Teufenbachweiher, Freyenweiher, Bachgadenweiher.
+Die GeoAdmin-Suche stellt georeferenzierte Namen bereit. Deren Punkte und die Wasserlinien werden unabhängig abgefragt. Fällt ein Datenanbieter aus, können sich Namen und Linien unvollständig darstellen. Die Live-Abfragen müssen auf der veröffentlichten GitHub-Seite getestet werden.
 
-**Bäche (8):** Reidbach, Gulmenbach, Zopfbach, Meilibach, Schlossbach, Risibach, Töbelibach, Winterbergholzbächli.
+## Weitere Funktionen
 
-Im Menü `Gewässerdarstellung` ist die **feste Auswahl** Standard. Der bisherige swisstopo-Layer kann nicht serverseitig auf diese 15 Namen beschränkt werden. Die App fragt die dafür benötigten **namentlich gefilterten OpenStreetMap-Vektorgeometrien** deshalb direkt über Overpass ab. Das ist ein zusätzlicher Datenanbieter; genaue Vollständigkeit und Geometrie müssen vor Ort geprüft werden. **Fehlende Datensätze werden nicht durch kleinere Gewässer ersetzt oder vorgetäuscht.**
-
-Als Alternativen bleiben die bisherigen swisstopo-WMS-Ebenen »generalisierte Gewässer« und »alle Bäche« anwählbar. Die Gewässerlinien sind unabhängig von der Ebene 7; um Wasserläufe **mit** Namen zu sehen, schalte 3 und 7 ein.
-
-## Flurnamen als Unterrichtsmaterial
-
-Die 19 Grundwörter mit Bedeutungen und den genannten Beispielen sind in `special.v5.4.js` hinterlegt. Mit **»Flurnamen-Glossar als CSV«** kann die Tabelle direkt als Unterrichts-Arbeitsgrundlage heruntergeladen werden (Excel/LibreOffice-kompatibel).
-
-## Technik / Grenzen
-
-- Alle Karten und Beschriftungen beziehen sich auf dieselben `layout.csv`-Koordinaten und die identische Bildfläche des Gesamt-Reliefs.
-- Der weisse Relief-Hintergrund bleibt automatisch aktiv, sobald Luftbild und Landeskarte ausgeschaltet sind; ausserhalb der vier Ecken bleibt der Projektor schwarz.
-- Bei Wädenswil-Maske werden auch die eigenen Namen-/Gewässerbilder als zusätzliche Ebenen geografisch abgeschnitten.
-- Historische swisstopo-Karten und Bild-Upload funktionieren weiterhin.
-- Geografische Namen und gefilterte Gewässer benötigen **Internet**. CORS-Sperren externer Kartendienste können WMS-Exporte beschränken. Overpass-Verfügbarkeit/Ratenlimits können das Laden der festen Gewässerauswahl verhindern. Es wird in dem Fall ein Fehler angezeigt, keine freie Geometrie erfunden.
-- Einzelne Wasserflächen, insbesondere komplexe OSM-Multipolygone, können beim direkten Vektorrendering unter Umständen nur als Umriss erscheinen. Die Projektion und Geometrie müssen mit echten Dienstdaten kontrolliert werden.
-- Die Vier-Ecken-Perspektive korrigiert die Projektion auf der Relief-Grundfläche; Höhenfehler auf Gipfeln sind nicht automatisch kompensiert.
-
-## Datenquellen
-
-- Aktuelle/historische Karten und Koordinaten: © swisstopo; https://www.geo.admin.ch/
-- Namensgeoreferenzierung: GeoAdmin SearchServer (swissNAMES); https://docs.geo.admin.ch/access-data/search.html
-- Namentlich gefilterte Gewässergeometrien: © OpenStreetMap-Mitwirkende (ODbL); https://www.openstreetmap.org/copyright
-- Flurnamen-Liste und Gewässernamen: vom Anwender bereitgestellt
+- Einzelne Karten als PNG, Kartenpaket als ZIP, Kalibrierung als JSON speichern.
+- Vorhandene Bilder laden und über vier frei ziehbare Ecken kalibrieren.
+- Schriftgrösse der Namen in der Startansicht anpassen.
+- Flurnamen-Glossar (19 Grundwörter) als CSV exportieren.
+- Heute/Historisch und die Wädenswil-Gemeindemaske verwenden.
+- Die Projektion bleibt geometrisch eine **ebene Homografie**. Für eine 3D-Höhenkorrektur wäre ein Geländemodell mit Projektorkalibrierung nötig.
 
 ## Tests
 
-`node tests/core.test.js` für Kernlogik, `python tests/browser_v5_3.py` für Chromium-Integration mit **simulierten externen Antworten**. Bei diesen Tests wird kein echter swisstopo-/Overpass-Dienst aufgerufen. Die Live-Verfügbarkeit muss auf der veröffentlichten GitHub-Pages-Seite geprüft werden.
+```bash
+node tests/core.test.js
+node tests/streams.test.js
+python tests/browser_streams.py
+```
 
+Diese Tests arbeiten mit **simulierten** swisstopo-/Overpass-Antworten. Der komplette reale Datenabruf und der Projektor HY320 wurden hier nicht praktisch getestet.
 
-## Version 5.4 – Behebung der weissen Gewässer / fehlenden Namen
-
-- Die 15 ausgewählten Gewässer werden zuerst wie bisher als benannte Vektorgeometrien abgefragt. Ist das nicht möglich, zeigt die App **sichtbar gekennzeichnet** das generalisierte offizielle Gewässernetz von swisstopo als Notlösung – dieses enthält dann zusätzliche Gewässer.
-- Bei teilweise gefundenen Gewässern nennt die App die fehlenden Namen, statt vollständige Ergebnisse vorzutäuschen.
-- Namenssuche fragt swissNAMES3D via den offiziellen GeoAdmin SearchServer in einem 3×4 Raster für den gesamten CSV-Ausschnitt ab, ergänzt um gezielte Namensabfragen.
-- Die Beschriftung hängt weiterhin von den eingeschalteten Ebenen ab. Der bisherige willkürliche Grenzwert von 52 Namen wurde entfernt; trotzdem können wegen der physischen Lesbarkeit auf 40×60 cm weiterhin Namen unterdrückt werden.
-- Eine sichtbare Rückmeldung zeigt, wie viele Namen erkannt und projiziert werden.
-- **Live-Datenprüfung offen:** Die Entwicklungsumgebung erlaubt keine Netzwerkaufrufe. Externe GeoAdmin-/Overpass-Anfragen können deshalb erst auf der veröffentlichten App vollständig getestet werden.
+**Datenherkunft:** Karten © swisstopo / GeoAdmin; gewässerbezogene OSM-Geometrien © OpenStreetMap-Mitwirkende (ODbL). Für den Unterricht die jeweiligen Quellenangaben erhalten.
