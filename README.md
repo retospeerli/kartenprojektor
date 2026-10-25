@@ -103,3 +103,11 @@ Die vier Ecken `NW/NE/SE/SW` lassen sich mit der Maus oder Pfeiltasten verschieb
 - Hochgeladene Zusatzbilder sind auf weiteren Kartenseiten über PageUp/PageDown erreichbar. Auch diese sind per Taste unabhängig schaltbar.
 
 Die Waldflächen stammen aus dem offiziellen WMS-Layer `ch.swisstopo.swisstlm3d-wald`.
+
+
+## Version 5.4
+- experimenteller Zusatz-Overlay fuer vier Wädenswiler Bäche: Zopfbach, Gulmenbach, Töbelibach und Untermosenbach
+- das bestehende Gewässerlayout bleibt unverändert; die vier Bäche werden nur zusätzlich überlagert
+- aktiviert nur im Modus **Heute**, wenn **Gewässer** aktiv ist
+- Datenquelle zur Laufzeit: OGD-ZH-WFS (Kanton Zürich), soweit dort die vier Bäche eindeutig als Linien gefunden werden
+- wenn der WFS keine eindeutigen Linien liefert, bleibt das normale Gewässerlayout bestehen

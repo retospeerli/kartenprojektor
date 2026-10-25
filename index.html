@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.3</title>
-  <link rel="stylesheet" href="./style.v5.3.css">
-  <script defer src="./core.v5.3.js"></script>
-  <script defer src="./app.v5.3.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.4</title>
+  <link rel="stylesheet" href="./style.v5.4.css">
+  <script defer src="./core.v5.4.js"></script>
+  <script defer src="./app.v5.4.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -125,6 +125,7 @@
       <div id="previewFrame" class="previewframe">
         <div id="previewWhite" class="mapWhite" hidden></div>
         <div id="previewTiles" class="previewTiles" hidden></div>
+        <div id="previewHydro" class="hydroOverlay" hidden></div>
         <div id="emptyPreview" class="emptyPreview">
           <span>◈</span>
           <strong>Projekt laden</strong>
@@ -159,6 +160,7 @@
   <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClip" clipPathUnits="objectBoundingBox"><path id="municipalPath" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
   <div id="projectionWhite" class="mapWhite projectionWhite" hidden></div>
   <div id="projectionTiles" class="projectionTiles"></div>
+  <div id="projectionHydro" class="hydroOverlay projectionHydro" hidden></div>
   <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" hidden>
     <polygon id="outline" points="" fill="none" stroke="#f3f9ee" stroke-width="2.5" stroke-dasharray="8 8" vector-effect="non-scaling-stroke"></polygon>
   </svg>
