@@ -1,4 +1,4 @@
-# Grossrelief-Kartenprojektor v5.9.8 – isolierte Gewässerkorrektur
+# Grossrelief-Kartenprojektor v5.9.9 – isolierte Gewässerkorrektur
 
 **Ausgangsversion:** v5.9.5. Ausschliesslich Gewässer-Ladeprozess korrigiert.
 
@@ -7,12 +7,12 @@
 - Eine zusätzliche nationale Anfrage darf nur **Sihl**-Geometrien anhand des exakten Namens ergänzen. Keine namenlosen Bachläufe und kein anderes Gewässer.
 - Keine synthetischen Sihl- oder Krebsbach-Verbindungen. Bei unvollständiger amtlicher Datenlage wird der fehlende Verlauf diagnostiziert, nicht erfunden.
 - UI, neun Tasten, Vier-Ecken-Kalibrierung, Export, bestehende Positivliste und alle übrigen Layer unverändert.
-- Exakte Programmversion im Seitentitel und Untertitel: **v5.9.8**.
+- Exakte Programmversion im Seitentitel und Untertitel: **v5.9.9**.
 
 **Hinweis:** Reale Live-Antworten der Schweizer Kartendienste konnten im Ausführungssystem nicht abgerufen werden. Funktionstests mit lokalen Daten prüfen die Unabhängigkeit der Grundkarte und das Filterverhalten, nicht die geografische Vollständigkeit der externen Daten.
 
 
-## v5.9.8 – ausschliesslich Sihl
+## v5.9.9 – ausschliesslich Sihl
 - Sihl hat eine eigene, deutlich kräftigere blaue Gewässersignatur, an der visuellen Hierarchie der Landeskarte 1:25’000 orientiert. Die bestehende Bach-Strichstärke aller anderen Gewässer bleibt unverändert.
 - Die Sihl-Linien aus amtlichen Quellen werden zusammen als Graph geometrisch untersucht. Nur wenn ein tatsächlich verbundener Sihl-Lauf zwei verschiedene Kartenränder erreicht, lautet die Diagnose „Sihl vollständig“. Die Linien werden exakt an den Rändern gekappt.
 - Ergänzende Sihl-Daten werden aus einem grösseren, ausschliesslich für die Sihl bestimmten geografischen Suchgebiet angefordert. Es werden keine fremden Gewässernetze eingeblendet.
@@ -20,10 +20,17 @@
 - Keine Änderung an Zürichsee, anderen Bächen und Weihern, Kartenbedienung oder Kalibrierung.
 
 
-## v5.9.8 – ausschliesslich Sihl im Kanton Schwyz
+## v5.9.9 – ausschliesslich Sihl im Kanton Schwyz
 - Amtliche Schwyzer Sihl-Geometrie zusätzlich über WFS `ch.sz.a041b.gewaessernetz.mwert` beziehen.
 - Nur ausdrücklich `Sihl` benannte Segmente und weitere Segmente derselben amtlichen Sihl-Routen-ID; alle anderen Gewässer ausschliessen.
 - Im geprüften Gesamtverlauf ist das Erreichen des **östlichen Kartenrandes** zwingend.
 - Die bestehende kräftige Sihl-Strichstärke, Zürichsee, alle anderen Bäche, Weiher und übrige Kartenebenen bleiben unverändert.
 - Keine Erfindung fehlender Gewässergeometrien: Bei fehlender Ost-Verbindung bleiben existierende Linien sichtbar, und die Diagnose meldet die verbleibende Lücke.
 - Amtlicher Schwyzer WFS: https://wfs.geo.sz.ch – Funktion im Live-Browser prüfen.
+
+
+### v5.9.9 – Sihl, Schwyzer Hauptlauf
+- Nur die Sihl geändert. Fehlende Schwyzer Achsenteile können trotz fehlendem Namensattribut durch topologischen Anschluss an den bereits amtlich als Sihl identifizierten Lauf ausgewählt werden.
+- Am Ostrand muss eine echte Liniengeometrie enden; keine langen Geraden, keine anderen namentlich bekannten Bäche.
+- Verwendet weiterhin ausschliesslich amtliche Zürcher/Schwyzer Linien und die Schweizer swisstopo-Sihl-Suche. Alle anderen Gewässer und Layer bleiben unverändert.
+- ACHTUNG: Testdaten sind simuliert, eine volle Live-Verifikation ist weiterhin erforderlich.
