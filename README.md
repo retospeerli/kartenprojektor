@@ -1,35 +1,36 @@
-## Fehlerkorrektur v5.9.1
+# Grossrelief-Kartenprojektor 5.9.2 – Korrektur der Gewässergeometrie
 
-Der kantonale WFS führt reale Ebenen mit Präfix wie `ms:ogd-0045_giszhpub_wb_gewaesserbezeichnung_l`. Version 5.9 erwartete nur `WB_GEWAESSERBEZEICHNUNG_L` und erkannte darum keine Gewässer. Diese Zuordnung wurde berichtigt, mit strikter Unterscheidung von 45.1 und 45.2.
+Diese Version übernimmt die Programmfunktionen und **die strikte Gewässer-Positivliste** aus 5.9.1 unverändert.
 
-**Unverändert:** ausschliesslich dieselbe Positivliste mit bereits ausdrücklich verlangten Gewässern, keine weiteren Datenquellen, keine zusätzlichen Bäche/Weiher, keine allgemeinen Gewässer-WMS oder zusätzlichen Fallbacks. Kartenlayout, Tasten, Projektion und Exporte unverändert. Der Live-WFS konnte hier nicht direkt geprüft werden; Tests benutzen die tatsächlichen Namen der amtlichen WFS-Ebenen und simulierte Geometrien.
+**Zugelassene Fliessgewässer (keine weiteren):**
+Zopfbach; Gulmenbach; Töbelibach; Untermosenbach; Reidbach/Riedbach/Wildbach; Teufenbach; Sihl; Krebsbach (ausdrücklich nicht Chrebsbach); Schlossbach; Sagenbach; Miesbach; Aabach; Meilibach; Mülibach Richterswil (Gewässernummer 2512).
 
-# Grossrelief-Kartenprojektor v5.9.1 — STRIKTE Positivliste
+**Zugelassene Weiher (keine weiteren):** Sternenweiher, Reidbachweiher/Riedbachweiher, Teufenbachweiher.
 
-**Zweck:** Die Kartenebene «Gewässer» zeichnet ausschliesslich die vom Nutzer ausdrücklich gewünschten Wasserläufe, Weiher und Seen.
+**Zugelassene Seen (keine weiteren):** Zürichsee, Hüttenersee/Hüttnersee, Ausee.
 
-## Sichtbare Wasserläufe (exakt)
+## Einzige fachliche Korrekturen
 
-Zopfbach, Gulmenbach, Töbelibach, Untermosenbach, Reidbach/Riedbach/Wildbach, Teufenbach, Sihl, Krebsbach (nicht Chrebsbach), Schlossbach, Sagenbach, Miesbach, Aabach, Meilibach und Mülibach Richterswil (Gewässernummer 2512).
+- Die bei 5.9.1 **über die Seefläche laufenden, geraden Bachlinien** werden geometrisch an der amtlichen Ufergrenze der zugelassenen Wasserflächen abgeschnitten. Die Quellgeometrie wird nicht verlängert oder durch selbst gezeichnete Verbindungslinien ergänzt.
+- Der Mülibach Richterswil wird bei der Namenszuordnung **nur mit der bestätigten Nummer 2512** berücksichtigt, um andere Mülibäche auszuschliessen.
+- Keine Änderungen an Tastatur, Layer-Reihenfolge, Projektor, Kalibrierung, Gestaltung, Export, Modus Heute/Historisch oder WFS-Datenquellen. Es bleibt bei 45.2, 45.3, 45.10 und 45.13; kein ungefiltertes Gewässernetz.
 
-## Sichtbare Weiher
+Die Verkürzung erfolgt zentral **vor dem SVG-/PNG-Rendering**, gilt daher auch für die Projektion und den Export. Bei völlig im See liegenden Bachlinien wird gar keine Bachlinie dargestellt.
 
-Sternenweiher, Reidbachweiher (auch Riedbachweiher), Teufenbachweiher.
+## Was noch überprüft werden muss
 
-## Sichtbare Seen
+Die Zürcher Geodaten lassen sich in dieser Entwicklungsumgebung nicht live laden. Der örtliche Test auf deiner GitHub-Seite ist deshalb nötig. Ein Gewässer, dessen amtliche Geometrie nicht geliefert wird, bleibt weiterhin fehlend – die Anwendung erfindet keine Koordinaten. Insbesondere ist die Sihl ausserhalb des Zürcher Datensatzbereichs damit noch nicht durchgehend garantiert.
 
-Zürichsee, Hüttenersee (Hüttnersee), Ausee.
+## GitHub Pages
 
-Es werden **keine anderen Linien oder Wasserflächen** gezeichnet. Keine ungefilterten Wasser-WMS-Dienste und keine Ersatzlayer. Die früheren Optionen «Alle Bäche» und «GeoJSON hochladen» sind entfernt.
+Den Inhalt dieses ZIP ins Stammverzeichnis des bestehenden Repositories hochladen, `index.html` ersetzen, committen und die Seite mit Strg+F5 neu laden. Die Dateinamen der Skripte und Styles wurden auf 5.9.2 aktualisiert, um Browser-Cache-Mischversionen zu vermeiden.
 
-Der kantonale WFS ist auf vier vorhandene Quellen beschränkt: 45.3 für Bezeichnungen, 45.2 für amtliche Routen der **eindeutig erkannten** Gewässernummern, 45.10 für **namentlich geprüfte** Seen/Weiher und 45.13 für die Zürichsee-Uferlinie. Zusätzliche 45.1-/45.11-/45.16-Massenquellen von v5.8 sind entfernt.
+## Tests
 
-**Fehlerverhalten:** Wenn der kantonale WFS nicht verfügbar ist, bleibt die Gewässerebene leer. Es erscheint eine Fehlermeldung. Keine zusätzlichen Bachlinien als Fallback, auch nicht über eine alte Kalibrierungsdatei.
+`node tests/test_strict_v592.js`
 
-**Wichtig:** Die kantonalen Live-Geodaten konnten in dieser Umgebung nicht direkt abgerufen werden. Die Tests bestätigen strikt gefilterte simulierte Eingabedaten und den Fehlerfall; sie beweisen nicht, dass sämtliche aufgelisteten Bäche und Weiher derzeit tatsächlich vom WFS geliefert werden. Fehlende Gewässer werden nicht frei gezeichnet.
+`node tests/test_shore_strict_v592.js`
 
-## Bedienung und Installation
+`python tests/test_strict_v592_browser.py`
 
-Alle bisherigen neun Tastenzuordnungen, Mehrfachauswahl, Vier-Ecken-Projektion, Historisch-Modus und PNG-/ZIP-Exporte bleiben erhalten.
-
-ZIP entpacken und Inhalt im Repository-Hauptverzeichnis hochladen. `index.html` ersetzen. Nach dem Commit GitHub Pages mit Strg+F5 neu laden.
+Browser-Tests verwenden ausdrücklich **simulierte** WFS-Antworten. Sie sind kein Nachweis vollständiger realer Wasserläufe.
