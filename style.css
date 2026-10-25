@@ -28,3 +28,67 @@ footer{margin-top:18px;font-size:11px;line-height:1.5;color:#94aab2}
 .projectorLayers{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.layerpill{background:#263b41;border:1px solid #4b6165;border-radius:18px;color:#c7d5d2;padding:7px 10px;font-size:11px;font-weight:680;display:flex;align-items:center;gap:6px}.layerpill[aria-pressed="true"]{background:#b5f1cb;border-color:#aaf7cc;color:#122b22}.layerpill .index{font-size:9px;color:#86a7a4}.showDock{position:absolute;right:13px;top:13px;background:#19332c;border:1px solid #72b693;border-radius:8px;color:#dcffe7;padding:8px 13px;font-size:11px}.showDock[hidden]{display:none}.projectorError{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);max-width:86vw;background:#53282bdf;color:#ffeded;border:1px solid #ff9b9b;border-radius:6px;padding:9px 13px;text-align:center;font-size:12px}.projectorError[hidden]{display:none}
 @media(max-width:1000px){.app{grid-template-columns:1fr}.main{min-height:540px}.sidebar{border-right:0;border-bottom:1px solid #233943}}
 @media(max-width:700px){.canvascontainer{min-height:320px}.topline,.underpreview{flex-direction:column;align-items:flex-start}.status{max-width:none}.dockhead{flex-direction:column;align-items:flex-start}.dockbuttons{justify-content:flex-start}}
+
+/* V3: schmale Vollbild-Projektorleiste. Die App-Startansicht bleibt ausserhalb des Projektors. */
+.projectorRail{position:absolute;top:8px;right:8px;bottom:8px;z-index:5;width:104px;display:flex;flex-direction:column;gap:4px;padding:6px;background:#0d1d22e0;border:1px solid #4e6b6b8c;border-radius:11px;backdrop-filter:blur(3px);overflow:hidden;box-shadow:0 3px 12px #0005}
+.projectorRail[hidden]{display:none}
+.railBack{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-height:45px;border:1px solid #557170;border-radius:7px;background:#22383b;color:#e5f8f2;font-size:22px;line-height:1}
+.railBack small{font-size:10px;font-weight:600;line-height:1.15}
+.railTitle{color:#adcac5;font-size:10px;letter-spacing:.10em;text-transform:uppercase;text-align:center;padding:4px 0}
+.projectorRail .projectorLayers{display:flex;flex-direction:column;flex:1 1 auto;gap:4px;margin:0;flex-wrap:nowrap;overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin}
+.projectorRail .railLayer{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;flex:1 1 0;min-height:34px;max-height:64px;width:100%;border:1px solid #42595a;border-radius:7px;background:#182e32;color:#e6f6ee;padding:3px 2px;text-align:center}
+.projectorRail .railLayer:hover{border-color:#b5f1cb}
+.projectorRail .railLayer[aria-pressed="true"]{background:#a8e5c3;border-color:#a8e5c3;color:#102a20}
+.railNumber{font-size:14px;font-weight:800;line-height:1}
+.railName{font-size:9px;font-weight:600;line-height:1.13;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.railPages{display:flex;align-items:center;justify-content:space-between;gap:2px;margin-top:3px}
+.railPages[hidden]{display:none}
+.railPages button{flex:1;border:1px solid #435f60;color:#eef8f3;background:#243a3f;border-radius:5px;padding:3px;font-size:15px}
+.railPages button:disabled{opacity:.32;cursor:not-allowed}
+.railPages span{font-size:9px;color:#bdcec8;white-space:nowrap}
+.railBottom{display:flex;flex-direction:column;gap:4px;border-top:1px solid #405653;padding-top:5px}
+.railAction{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px 2px;background:#22383c;color:#e1f6e9;border:1px solid #48635d;border-radius:7px;font-size:16px;line-height:1.1}
+.railAction small{font-size:9px;font-weight:700}
+.railAction.active{background:#b5f1cb;color:#193227}
+.railAction[hidden]{display:none}
+.projectorview .showDock{position:absolute;z-index:6;right:0;top:50%;transform:translateY(-50%);border-radius:9px 0 0 9px;width:28px;height:65px;padding:3px 0;font-size:16px;background:#172a2de8;opacity:.75}
+.projectorview .showDock:hover{opacity:1}
+@media(max-height:520px){.projectorRail{width:92px}.projectorRail .railLayer{min-height:24px;max-height:41px}.railBack{min-height:32px}.railBottom .railAction{padding:2px}.railTitle{padding:0}}
+
+/* V4: weisse Reliefbeleuchtung statt schwarzem Hintergrund bei transparenten Ebenen. */
+.mapWhite{position:absolute;inset:0;background:#fff;pointer-events:none}
+.mapWhite[hidden]{display:none}
+.projectionWhite{inset:auto auto auto 0;top:0;transform-origin:0 0;will-change:transform;backface-visibility:hidden}
+.hydroMode{margin-top:14px}
+.hydroMode small{font-size:11px;line-height:1.45;color:#9db3b9}
+.lightHint{font-size:12px;line-height:1.5;color:#d5e8e0;background:#263b40;border-left:3px solid #dce9e0;padding:10px 12px;margin:12px 0 0;border-radius:4px}
+.lightHint span{font-size:15px;margin-right:5px}
+/* Kacheln dürfen die transformierte Reliefgrenze nicht überschreiten. */
+.previewTiles .mapTileLayer,.projectionTiles .mapTileLayer{overflow:hidden}
+.projectionTiles .mapTileLayer{clip-path:inset(0);contain:paint}
+/* V5: Heute / Historisch bleiben im Startmenü; die Projektorleiste bleibt schmal. */
+.modePicker{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin:12px 0}
+.modeButton{padding:12px 6px;background:#243a42;color:#d3e5e0;border:1px solid #4f6b72;border-radius:9px;font-weight:750}
+.modeButton.active,.modeButton[aria-pressed="true"]{background:#b5f1cb;color:#102d22;border-color:#b5f1cb}
+.modeOptions{padding:7px 0 2px}.modeOptions[hidden]{display:none}
+.boundaryToggle{display:flex;gap:10px;align-items:flex-start;padding:11px;border:1px solid #4c6669;border-radius:10px;background:#1b3037;cursor:pointer}
+.boundaryToggle input{width:19px;height:19px;flex:0 0 auto;margin-top:3px;accent-color:#b5f1cb}
+.boundaryToggle span{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.boundaryToggle small{color:#b4cbd0;font-size:11px;line-height:1.4}
+#boundaryStatus{margin:9px 0 1px}
+#historicYear{width:100%;margin-top:5px;accent-color:#b5f1cb}
+#historicYearLabel{font-size:16px;color:#c0f4ce}
+.yearPresets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:12px 0}
+.yearPresets button{border-radius:7px;padding:7px 3px;color:#e0f2ea;background:#2a4148;border:1px solid #516e6a;font-size:11px}
+.yearPresets button:hover{background:#3d6158}
+.railModes{display:flex;flex-direction:column;gap:3px}
+.railModes button{min-height:26px;color:#e0f0ea;background:#243d40;border:1px solid #48666a;border-radius:6px;font-size:10px;font-weight:700}
+.railModes button.active{background:#b5f1cb;border-color:#b5f1cb;color:#102d22}
+.railHistoricYear{margin-top:3px;display:grid;gap:3px;justify-items:center;border:1px solid #405a5c;border-radius:6px;padding:4px}
+.railHistoricYear[hidden]{display:none}
+.railHistoricYear span{font-size:13px;font-weight:800}
+.railHistoricYear div{display:flex;width:100%;gap:3px}
+.railHistoricYear button{flex:1;min-width:0;padding:4px 0;background:#2a4247;color:#e5f4ed;border:1px solid #4c6b66;border-radius:5px;font-size:9px}
+.municipalSvg{position:absolute;width:0;height:0;pointer-events:none;opacity:0}
+/* HTML hidden muss auch gegen Grid/Flex-Regeln der Vorschau gewinnen. */
+[hidden]{display:none!important}
