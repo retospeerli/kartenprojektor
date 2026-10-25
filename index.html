@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.7</title>
-  <link rel="stylesheet" href="./style.v5.7.css">
-  <script defer src="./core.v5.7.js"></script>
-  <script defer src="./hydro.v5.7.js"></script>
-  <script defer src="./app.v5.7.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.8</title>
+  <link rel="stylesheet" href="./style.v5.8.css">
+  <script defer src="./core.v5.8.js"></script>
+  <script defer src="./hydro.v5.8.js"></script>
+  <script defer src="./app.v5.8.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -87,6 +87,7 @@
       <label class="button ghost inputlabel" for="hydroFile" style="display:block;margin-top:8px;font-size:12px">↑ Amtliche Gewässer-GeoJSON laden (optional)</label>
       <input id="hydroFile" type="file" accept=".geojson,.json,application/geo+json,application/json" hidden>
       <p id="hydroStatus" class="hint" role="status">Gewässer-Geodaten für Seen, Weiher und ausgewählte Bäche werden beim Einschalten geprüft.</p>
+      <details id="hydroAudit" class="hydroAudit" hidden><summary>Gewässer einzeln kontrollieren</summary><div id="hydroAuditRows"></div></details>
       <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>
       <div id="uploadLayerList" class="layerlist uploadlist"></div>
