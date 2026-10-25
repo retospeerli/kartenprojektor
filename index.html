@@ -9,6 +9,7 @@
   <script defer src="./app.js"></script>
 </head>
 <body>
+<svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
 <div class="app">
   <aside class="sidebar">
     <header class="identity">
@@ -51,17 +52,45 @@
     </section>
 
     <section class="section">
-      <div class="sectiontitle"><span>03</span><h2>Karten ein-/ausblenden</h2></div>
+      <div class="sectiontitle"><span>03</span><h2>Projektionsmodus</h2></div>
+      <div class="modePicker" role="group" aria-label="Kartenmodus wählen">
+        <button id="modeToday" class="modeButton active" type="button" aria-pressed="true">Heute</button>
+        <button id="modeHistoric" class="modeButton" type="button" aria-pressed="false">Historisch</button>
+      </div>
+      <div id="todayOptions" class="modeOptions">
+        <label class="boundaryToggle"><input id="waedenswilOnly" type="checkbox"> <span><strong>Nur Gemeinde Wädenswil</strong><small>Alle Karten auf die heutige Gemeindegrenze beschränken (BFS 293). Der Rest des Reliefs bleibt weiss beleuchtet.</small></span></label>
+        <p id="boundaryStatus" class="hint" role="status">Gemeindegrenze wird beim Aktivieren direkt von geo.admin.ch geladen.</p>
+      </div>
+      <div id="historicOptions" class="modeOptions" hidden>
+        <label class="fieldlabel">Historisches Kartenjahr <strong id="historicYearLabel">1900</strong>
+          <input type="range" id="historicYear" min="1844" max="2026" step="1" value="1900">
+        </label>
+        <div class="yearPresets" id="yearPresets"></div>
+        <p class="hint">Swisstopo-Zeitreise (Dufour-, Siegfried- und Landeskarten). Historische Kartenstände können vom gewählten Jahr abweichen, wenn nicht jährlich neu kartiert wurde.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectiontitle"><span>04</span><h2>Karten ein-/ausblenden</h2></div>
       <p class="hint">Swisstopo-Ebenen und hochgeladene Bilder erscheinen gemeinsam. Jede Karte kann einzeln verzerrt, angezeigt und exportiert werden.</p>
       <div class="subheading">Aus CSV erzeugte swisstopo-Karten</div>
       <div id="layerList" class="layerlist"></div>
+      <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
+      <label class="fieldlabel hydroMode">Gewässerdarstellung
+        <select id="waterDetail">
+          <option value="wichtig" selected>Hauptgewässer · generalisiert (empfohlen)</option>
+          <option value="alle">Alle Bäche · sehr detailliert</option>
+        </select>
+        <small>swissTLMRegio reduziert Kleingewässer. Eine exakte Auswahl von 20 Bächen erfordert zusätzlich eine Vektordaten-Auswertung.</small>
+      </label>
+      <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>
       <div id="uploadLayerList" class="layerlist uploadlist"></div>
       <div class="legend">© Bundesamt für Landestopografie swisstopo · eigene Kartenbilder bleiben lokal im Browser</div>
     </section>
 
     <section class="section">
-      <div class="sectiontitle"><span>04</span><h2>Verzerren & herunterladen</h2></div>
+      <div class="sectiontitle"><span>05</span><h2>Verzerren & herunterladen</h2></div>
       <p class="hint">Wichtig: Die Vier-Ecken-Kalibrierung verzerrt jedes sichtbare Kartenbild so, dass es auf das Relief projiziert werden kann.</p>
       <label class="fieldlabel">Auflösung für Downloads (längere Seite)
         <select id="exportSize">
@@ -94,6 +123,7 @@
 
     <div class="canvascontainer">
       <div id="previewFrame" class="previewframe">
+        <div id="previewWhite" class="mapWhite" hidden></div>
         <div id="previewTiles" class="previewTiles" hidden></div>
         <div id="emptyPreview" class="emptyPreview">
           <span>◈</span>
@@ -120,35 +150,47 @@
 
     <div class="instructions">
       <strong>Zielbild verzerren</strong>
-      <p>Im Projektormodus die vier Punkte <b>NW · NE · SE · SW</b> auf die realen Relief-Ecken ziehen. Danach werden die sichtbaren Kartenbilder perspektivisch verzerrt. Du kannst also sowohl erzeugte swisstopo-Karten als auch hochgeladene Einzelbilder direkt auf das Relief projizieren.</p>
+      <p>Mit <b>H</b> zwischen Heute und Historisch wechseln. Im Vollbild mit <b>1–9</b> eine Karte wählen. <b>Shift + 1–9</b> schaltet zusätzliche Ebenen dazu. Mit <b>K</b> die vier Kalibrierungspunkte einblenden und auf die Reliefecken ziehen, mit <b>T</b> die schmale Kartenleiste verbergen und mit <b>Esc</b> zur Startansicht zurückkehren.</p>
     </div>
   </main>
 </div>
 
 <section id="projector" class="projectorview" hidden aria-label="Projektion auf das Relief">
+  <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClip" clipPathUnits="objectBoundingBox"><path id="municipalPath" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
+  <div id="projectionWhite" class="mapWhite projectionWhite" hidden></div>
   <div id="projectionTiles" class="projectionTiles"></div>
-  <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" hidden>
     <polygon id="outline" points="" fill="none" stroke="#f3f9ee" stroke-width="2.5" stroke-dasharray="8 8" vector-effect="non-scaling-stroke"></polygon>
   </svg>
-  <div id="handles" class="handles">
-    <div class="handle" data-index="0" tabindex="0">NW</div>
-    <div class="handle" data-index="1" tabindex="0">NE</div>
-    <div class="handle" data-index="2" tabindex="0">SE</div>
-    <div class="handle" data-index="3" tabindex="0">SW</div>
+  <div id="handles" class="handles" hidden>
+    <div class="handle" data-index="0" tabindex="0" aria-label="Nordwest-Ecke verschieben">NW</div>
+    <div class="handle" data-index="1" tabindex="0" aria-label="Nordost-Ecke verschieben">NE</div>
+    <div class="handle" data-index="2" tabindex="0" aria-label="Südost-Ecke verschieben">SE</div>
+    <div class="handle" data-index="3" tabindex="0" aria-label="Südwest-Ecke verschieben">SW</div>
   </div>
-  <div class="projectorDock" id="projectorDock">
-    <div class="dockhead">
-      <div><strong>◈ Grossrelief · Live-Projektion</strong><small>Einzelne Karten ein-/ausblenden · M = Ecken · T = Menü</small></div>
-      <div class="dockbuttons">
-        <button id="toggleHandles" class="button ghost">Ecken ausblenden (M)</button>
-        <button id="resetCorners" class="button ghost">Ecken zurücksetzen</button>
-        <button id="exitProjector" class="button secondary">Schliessen (Esc)</button>
-      </div>
-    </div>
-    <div class="subheading inline">Sichtbare Karten</div>
+
+  <!-- Schmale Projektor-Leiste: nur Kartenwahl, Kalibrierung und zurück. -->
+  <nav class="projectorRail" id="projectorDock" aria-label="Karten und Projektor-Steuerung">
+    <button type="button" class="railBack" id="exitProjector" title="Zurück zur Startansicht (Esc)" aria-label="Zum Hauptmenü zurückkehren">
+      <span aria-hidden="true">↩</span><small>Menü</small>
+    </button>
+    <div class="railTitle">Modus</div>
+    <div class="railModes"><button id="railToday" type="button" title="Aktuelle Karten (H)">Heute</button><button id="railHistoric" type="button" title="Historische Karten (H)">Früher</button></div>
+    <div id="railHistoricYear" class="railHistoricYear" hidden><span id="railYearValue">1900</span><div><button type="button" id="railYearBack" title="10 Jahre zurück">−10</button><button type="button" id="railYearForward" title="10 Jahre vorwärts">+10</button></div></div>
+    <div class="railTitle">Karten</div>
     <div id="projectorLayers" class="projectorLayers"></div>
-  </div>
-  <button id="showDock" class="showDock" title="Menü ein-/ausblenden (T)" hidden>☰ Menü (T)</button>
+    <div class="railPages" id="railPages" hidden>
+      <button id="prevPage" aria-label="Vorherige Kartenseite" title="Vorherige Kartenseite">‹</button>
+      <span id="pageIndicator">1/1</span>
+      <button id="nextPage" aria-label="Nächste Kartenseite" title="Nächste Kartenseite">›</button>
+    </div>
+    <div class="railBottom">
+      <button type="button" id="toggleHandles" class="railAction" title="Vier Ecken kalibrieren (K)">⌗<small>Ecken</small></button>
+      <button type="button" id="resetCorners" class="railAction" title="Kalibrierung zurücksetzen" hidden>↺<small>Reset</small></button>
+      <button type="button" id="toggleDock" class="railAction" title="Leiste ausblenden (T)">⇥<small>Leiste</small></button>
+    </div>
+  </nav>
+  <button type="button" id="showDock" class="showDock" title="Kartenleiste wieder anzeigen (T)" hidden aria-label="Kartenleiste zeigen">☰</button>
   <div id="projectorError" class="projectorError" hidden></div>
 </section>
 </body>
