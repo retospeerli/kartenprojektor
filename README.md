@@ -19,3 +19,15 @@ Für die Sihl erfolgt **kein Zugriff mehr auf den Schwyzer WFS**. Andere bereits
 - Weitere Regressionstests zu den unveränderten Gewässern in `tests/`
 
 **Prüfstand:** Die Programm- und Browsertests haben simulierte offizielle GeoAdmin-Antworten verwendet. Ein Abruf der tatsächlichen GeoAdmin-Geometrien aus dieser Ausführungsumgebung war nicht möglich. Deshalb ist die vollständige Sihl auf der veröffentlichten Website noch nicht live nachgewiesen.
+
+
+## v5.9.12 – ausschliesslich kurze Sihl-Datenlücke
+
+Die bestehende swisstopo-Sihl und die übrigen Gewässer bleiben unverändert.
+Der swissTLM3D-Abfragebereich der Sihl ist geringfügig breiter. Ein bislang
+ausgefiltertes, tatsächlich vorhandenes swisstopo-Linienstück wird nur übernommen,
+wenn es zwei getrennte, amtlich bestätigte Sihl-Abschnitte geometrisch verbindet.
+Einseitige Zuflüsse und fremd benannte Bäche werden verworfen. Keine Freihandlinie.
+
+Die echte Lückenbehebung hängt davon ab, dass der GeoAdmin-Dienst diese
+Originalgeometrie an den Browser zurückgibt; dies wurde nicht live geprüft.
