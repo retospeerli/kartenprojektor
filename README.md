@@ -1,113 +1,61 @@
-# Fehlerkorrektur v5.3
+# Grossrelief-Kartenprojektor v5.5 – GitHub Pages
 
-**Behebt die Meldung `Core.whiteReliefBackground is not a function`.** Die vorherige ZIP enthält die Funktion bereits, die Ursache war daher vermutlich ein Versionskonflikt zwischen zwischengespeicherten GitHub-Pages-Dateien der Versionen 4 und 5 (`app.js` neuer, `core.js` älter). Diese Version verwendet eindeutige Dateinamen `core.v5.3.js` und `app.v5.3.js` sowie eine explizite Versionsprüfung. Die Weissfläche wird ausserdem unabhängig von Core berechnet.
+Diese Version behebt zwei reale Probleme aus v5.4:
 
-**Aktualisierung:** Alle Dateien dieses ZIP-Pakets ins Stammverzeichnis des GitHub-Repositories hochladen, einschliesslich der neuen JS-/CSS-Dateien. `index.html` überschreiben. Dann im Browser **Strg+F5** drücken (unter Mac `Cmd+Shift+R`). Nicht nur `app.v5.3.js` ersetzen.
+1. **Versionskonflikt:** Der Versionscheck verlangte irrtümlich weiterhin `5.3.0`. Ab jetzt erwarten `index.html` und `app.v5.5.js` die Version `5.5.0`; alle eingebundenen Dateien haben neue Namen.
+2. **Ungenaue Zürichsee-Uferlinie:** Die standardmässige Gewässerdarstellung nutzte bisher die generalisierte Hydrographie von swissTLMRegio/vec200. Das vereinfachte Seeufer war für das projizierte Relief nicht genau genug. **Die App verwendet diese Gewässerquelle nicht mehr.**
 
-Alle Funktionen aus v5 bleiben bestehen.
+## Präzise Gewässer – Versuch mit amtlichen Vektoren
 
----
+Im Modus **Heute**, bei **3 = Gewässer** und der Standardeinstellung **„Amtliche Ufer + ausgewählte Bäche“**, fragt die App zuerst die offiziellen offenen Vektordaten des Kantons Zürich ab:
 
-# Grossrelief-Kartenprojektor — Version 5 (GitHub Pages)
+- stehende Gewässer als präzise **Gewässerflächen** (`WB_STEHGEWAESSER_F`),
+- die speziell vermessene **Zürichsee-Uferlinie** (`WB_ZUERICHSEE_L`),
+- **benannte Fliessgewässergeometrien** (`WB_GEWAESSERBEZEICHNUNG_L` bzw. `WB_FLIESSGEWAESSER_L`).
 
-Reine Browser-App, kein Python, kein Server und keine Installation. Deine `layout.csv` liefert den georeferenzierten Gesamt-Ausschnitt des Reliefs; alternativ lassen sich vorhandene Kartenbilder direkt hochladen.
+Die App liest zuerst WFS *GetCapabilities*, um die **tatsächlich veröffentlichten Typnamen** zu ermitteln. Anschliessend werden Daten mit LV95-Koordinaten (EPSG:2056) abgefragt. Das verhindert die früheren Vermutungen zu WFS-Typnamen, die wahrscheinlich keine Treffer lieferten.
 
-## Auf GitHub Pages veröffentlichen
+Gesuchte ergänzende Bachläufe:
+
+- Zopfbach
+- Gulmenbach
+- Töbelibach
+- Untermosenbach
+
+Zusätzlich können benannte grössere Gewässer wie Sihl, Aabach, Meilibach und Riedbach erscheinen. **Es werden keine frei gezeichneten Bachläufe erzeugt.** Mehrere Linienabschnitte desselben Bachs können separat erscheinen. Die Startansicht meldet, wie viele der vier Bäche anhand der amtlichen Daten gefunden wurden (z. B. `3/4`).
+
+**Wichtig:** Der amtliche WFS-Abruf konnte in der Entwicklungsumgebung nicht live verifiziert werden. Die Geometrieabfragen wurden mit realistisch aufgebauten Testantworten im Browser geprüft. Abhängig vom Server/CORS kann die Online-Abfrage scheitern. In diesem Fall schaltet die App sichtbar auf das **genauere swissTLM3D-Gewässernetz** um. Damit stimmt die Seeuferquelle besser als vorher; es können jedoch zusätzliche Rinnsale erscheinen. Der Fehler wird in der Startansicht angezeigt statt unterdrückt.
+
+Alternativ lassen sich LV95-GeoJSON-Dateien der amtlichen Gewässerdaten in der Startansicht hochladen. Das funktioniert ohne direkten WFS-Zugriff und kann die vier Bachläufe ergänzen. GeoJSON-Daten müssen bereits in EPSG:2056 vorliegen.
+
+## Bedienung bleibt unverändert
+
+- `layout.csv` hochladen (Gesamtfläche aus allen Reliefsegmenten).
+- Projektormodus starten; 1 bis 9 schalten jeweils nur die entsprechende Kartenebene ein/aus.
+- 1 Luftbild, 2 Landeskarte, 3 Gewässer, 4 Verkehr, 5 Grenzen, 6 Siedlungen, 7 Ortsnamen, 8 Gebäude, 9 Wald.
+- Mehrfachauswahl ohne Shift; vier frei ziehbare Eckpunkte; T = Randmenü, K = Eckpunkte, Esc = Startmenü.
+- Wenn keine Deckkarte aktiv ist, wird das Relief weiss beleuchtet.
+- Heute/Historisch, Gemeindemaske Wädenswil und PNG-/ZIP-Exporte bleiben erhalten.
+- **Wichtig bei PNG-/ZIP-Exporten:** Ein fremder WMS-Server kann aufgrund von CORS seinen Bildexport sperren. Amtlich eingelesene Vektoren lassen sich hingegen direkt im Browser zeichnen und exportieren.
+
+## GitHub-Installation
 
 1. ZIP entpacken.
-2. Den **Inhalt** des ZIPs (nicht den übergeordneten Ordner) ins Stammverzeichnis eines GitHub-Repositories legen. `index.html` muss direkt im Stammverzeichnis liegen.
-3. GitHub: **Settings → Pages → Deploy from a branch → main → / (root)** aktivieren.
-4. Veröffentlichte URL im Browser aufrufen.
+2. **Sämtliche Dateien und Ordner** direkt in das Stammverzeichnis deines bestehenden GitHub-Repositories hochladen.
+3. `index.html` muss die neuen Dateien `core.v5.5.js`, `hydro.v5.5.js`, `app.v5.5.js` und `style.v5.5.css` laden.
+4. Änderungen committen; nach der Veröffentlichung GitHub Pages mit **Strg + F5** neu laden.
 
-## Modus »Heute«
-
-Aktuelle swisstopo-Karten als separate Ebenen: Luftbild, Gewässer, Verkehrswege, Gemeindegrenzen, Siedlungen, Ortschaften, Bauten und Landeskarte. Alle beziehen sich auf die **Gesamtausdehnung** deiner CSV, niemals auf einzelne Drucksegmente.
-
-### Nur Gemeinde Wädenswil
-
-Im Hauptmenü: **Heute → Nur Gemeinde Wädenswil** aktivieren. Die App lädt die **amtliche aktuelle** Gemeindegeometrie von Wädenswil (BFS-Gemeindenummer **293**) direkt über den öffentlichen Feature-Service des Bundes (swissBOUNDARIES3D). Für die Geometrie wird `EPSG:2056` (LV95) angefragt. Kartenelemente ausserhalb der Gemeindegrenze werden ausgeblendet, innerhalb bleiben sie unverändert. Der Rest des Reliefs ist weiterhin **weiss beleuchtet**, damit das 3D-Modell sichtbar bleibt. Die Gemeindegrenze wird vor der Vier-Ecken-Projektorverzerrung angewandt.
-
-Die Begrenzung gilt **ausschliesslich für »Heute«**, nicht für historische Karten. Der Modus ohne CSV kann keine geografische Begrenzung berechnen. Wenn der Dienst nicht erreichbar ist oder keine aktuelle amtliche Polygongeometrie liefert, wird die Option **automatisch deaktiviert**; eine ungeprüfte oder erfundene Grenze wird nicht angezeigt.
-
-Abruf-API:
-
-`https://api3.geo.admin.ch/rest/services/ech/MapServer/find?layer=ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill&searchText=293&searchField=gde_nr&contains=false&geometryFormat=geojson&returnGeometry=true&sr=2056`
-
-Referenz: [GeoAdmin – Find Features](https://docs.geo.admin.ch/access-data/find-features.html), [swissBOUNDARIES3D](https://www.swisstopo.admin.ch/de/landschaftsmodell-swissboundaries3d).
-
-## Modus »Historisch«
-
-Im Hauptmenü **Historisch** wählen und am Jahresregler ein Jahr von **1844 bis 2026** einstellen oder eine der Jahresvorgaben verwenden. Die App fragt die offizielle **swisstopo-Zeitreise** (`ch.swisstopo.zeitreihen`) über WMS `GetMap` mit einem zeitbezogenen `TIME=YYYY-12-31` an. Gemeint sind historische topografische Kartenwerke, darunter Dufourkarte, Siegfriedkarte und ältere Landeskarten.
-
-Der Jahreswert ist ein **angefragter Zeitstand**, nicht notwendigerweise das Druckjahr jedes Kartenblatts. Für einige Gegenden/Jahre kann die tatsächlich gezeigte Ausgabe abweichen oder der Dienst kein Bild liefern. Die App kann das angeforderte Jahr im Projektormodus in **10-Jahres-Schritten** ändern. Die Live-Verfügbarkeit der einzelnen Jahre muss am echten swisstopo-Dienst überprüft werden.
-
-Referenz: [swisstopo – Zeitreisen](https://www.swisstopo.admin.ch/de/zeitreise-kartenwerke), [GeoAdmin WMS](https://docs.geo.admin.ch/visualize-data/wms.html).
-
-## Projektor und Tastatur
-
-Im Startmenü werden CSV-Dateien und Kartenbilder geladen, Modi und Jahre gewählt, Daten exportiert und Kalibrierungen verwaltet. Mit **Projektor starten** öffnet sich die Vollbildprojektion. Die schmale Leiste am rechten Bildschirmrand enthält Moduswechsel, einzelne Karten und Kalibrierung.
-
-| Steuerung | Funktion |
-|---|---|
-| `H` | Zwischen Heute und Historisch wechseln |
-| `1`–`9` | Jeweilige Ebene unabhängig ein-/ausschalten (Mehrfachauswahl) |
-| `K` | Vier verschiebbare Kalibrierungsecken ein-/ausblenden |
-| `T` | Seitenleiste ausblenden/einblenden |
-| `PageUp` / `PageDown` | Weitere Karten aufrufen |
-| `Esc` | Projektormodus beenden, zurück zum Hauptmenü |
-
-Die vier Ecken `NW/NE/SE/SW` lassen sich mit der Maus oder Pfeiltasten verschieben. Dieselbe Kalibrierung gilt für alle Karten – auch beim Moduswechsel. Die App korrigiert perspektivisch die Projektor-Grundfläche, nicht die 3D-Höhenversetzung auf Gipfeln.
-
-## Eigene Kartenbilder und Export
-
-- PNG-, JPG- und WebP-Kartenbilder dürfen zusätzlich geladen und im Projektormodus verzerrt werden.
-- Kartenkombination als PNG, verfügbare Einzelkarten als ZIP herunterladen.
-- Historische Exporte enthalten die Jahreszahl im Dateinamen.
-- Wenn »Nur Gemeinde Wädenswil« aktiv ist, werden **auch die PNG-Exporte geografisch maskiert**; ausserhalb der Gemeinde bleibt bei der Kombination der weisse Relief-Hintergrund.
-- Kalibrierungen lassen sich als JSON exportieren/importieren.
-- Wenn weder Luftbild noch Landeskarte aktiv sind, wird die Relief-Grundfläche automatisch weiss projiziert und nur die Karteninhalte farbig darüber dargestellt.
-
-**CORS-Hinweis:** Die swisstopo-Bilder können in der Regel auch dann projiziert werden, wenn die Webseite sie nicht als Canvas-Pixel auslesen darf. Der PNG-/ZIP-Export der direkt abgerufenen WMS-Karten kann daher von der CORS-Freigabe des Dienstes abhängen. Die App kann Browser-Sicherheitsregeln nicht umgehen. Eigene lokale Bilddateien sind davon unabhängig.
-
-## Technische Dateien
-
-- `index.html`: Startseite und schmale Projektorleiste
-- `style.v5.3.css`: Layout
-- `core.v5.3.js`: CSV-Parsing, Zeitreise-WMS-URL, LV95-Geometrie, Perspektive, ZIP
-- `app.v5.3.js`: Modi, Jahreswahl, Gemeinde-Maske, Kartenladefunktion, UI, Bildexport
-- `examples/layout.csv`: Beispiel-Relief
-- `tests/core.test.js`: Node.js Unit-Tests (nur für Entwickler)
-- `tests/browser_v5.py`: reproduzierbarer Chromium-Test mit simulierten WMS- und Grenzdaten (nur für Entwickler)
+Alte Versionsdateien dürfen im Repository bleiben, sie werden von der aktuellen `index.html` nicht mehr referenziert. Die App läuft ohne Python und ohne Server (GitHub Pages).
 
 ## Teststand
 
-- **Kernlogik:** CSV, WMS-URLs, Zeitparameter, Polygone, Homographie, ZIP.
-- **Chromium:** CSV laden, aktuelle Karte, Gemeinde-Maske über simulierte amtliche API-Antwort, Historisch 1900/1880/1890, Projektormodus, H-Taste, Eckmarkierungen, zurück zum Menü, PNG mit weissem Hintergrund und korrekt ausgeblendeten Bildteilen.
-- **Noch nicht live validiert:** echte WMS-Ausgaben für gewünschte historische Jahre, CORS-Berechtigungen und direkter Grenzabruf auf einer öffentlich gehosteten GitHub-Pages-Seite. Ebenfalls keine Prüfung am physischen Projektor.
+- `node tests/core.test.js`: CSV, BBOX, Perspektive, WMS und Varianten getestet.
+- `python tests/test_v55_browser.py`: WFS-Typnamen, präzise Seefläche und Uferlinie, vier Bachnamen, Projektionsverzerrung, Mehrfachauswahl, Weissbeleuchtung, PNG-Export erfolgreich gegen simulierte amtliche Antworten getestet.
+- `python tests/test_fallback_browser.py`: Kantons-WFS nicht erreichbar → swissTLM3D statt ungenauem vec200, Fehlermeldung und stabiles UI getestet.
+- Noch **nicht** getestet: tatsächliche Erreichbarkeit der kantonalen WFS-GeoJSON-Antworten im veröffentlichten GitHub Pages und Projektion auf deinem HY320 Mini.
 
-## Version 5.3 – Reihenfolge der Kartenpunkte
+## Quellen
 
-- **1**: Luftbild
-- **2**: Landeskarte
-- **3**: Gewässer
-- **4**: Verkehrswege
-- **5**: Gemeindegrenzen
-- **6**: Siedlungen
-- **7**: Ortsnamen
-- **8**: Gebäude und Kunstbauten
-- **9**: Waldflächen (swissTLM3D Wald).
-- Ein Tastendruck oder Klick auf eine Kartenkachel schaltet **nur diese Ebene** um. Kein Shift mehr nötig. Mehrfachauswahl funktioniert gleichzeitig in der Startansicht und im Projektor.
-- Beispiel: **3 + 7** zeigt Gewässer und Ortsnamen, **4 + 8 + 9** Verkehrswege, Bauten und Wald.
-- Hintergründe zuerst: Luftbild oder Landeskarte liegen unter transparenten Ebenen, insbesondere Text und Gewässer sind nicht verdeckt. Bei zugleich aktivem Luftbild und Landeskarte ist die Landeskarte sichtbar über dem Luftbild.
-- Wenn weder Landeskarte noch Luftbild eingeschaltet ist, bleibt der Reliefhintergrund weiss; der Projektor ausserhalb des Reliefs schwarz.
-- Hochgeladene Zusatzbilder sind auf weiteren Kartenseiten über PageUp/PageDown erreichbar. Auch diese sind per Taste unabhängig schaltbar.
-
-Die Waldflächen stammen aus dem offiziellen WMS-Layer `ch.swisstopo.swisstlm3d-wald`.
-
-
-## Version 5.4
-- experimenteller Zusatz-Overlay fuer vier Wädenswiler Bäche: Zopfbach, Gulmenbach, Töbelibach und Untermosenbach
-- das bestehende Gewässerlayout bleibt unverändert; die vier Bäche werden nur zusätzlich überlagert
-- aktiviert nur im Modus **Heute**, wenn **Gewässer** aktiv ist
-- Datenquelle zur Laufzeit: OGD-ZH-WFS (Kanton Zürich), soweit dort die vier Bäche eindeutig als Linien gefunden werden
-- wenn der WFS keine eindeutigen Linien liefert, bleibt das normale Gewässerlayout bestehen
+- [GIS-ZH: Öffentliche Oberflächengewässer](https://geolion.zh.ch/geodatensatz/743) – Fliessgewässerbezeichnung, Zürichsee-Uferlinie, stehende Gewässer
+- [swisstopo: swissTLM3D Gewässernetz](https://www.swisstopo.admin.ch/de/landschaftsmodell-swisstlm3d) – genauere Wasserläufe und Seeumrisse
+- [OGD-WFS Kanton Zürich](https://maps.zh.ch/wfs/OGDZHWFS)

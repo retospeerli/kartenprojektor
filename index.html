@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.4</title>
-  <link rel="stylesheet" href="./style.v5.4.css">
-  <script defer src="./core.v5.4.js"></script>
-  <script defer src="./app.v5.4.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.5</title>
+  <link rel="stylesheet" href="./style.v5.5.css">
+  <script defer src="./core.v5.5.js"></script>
+  <script defer src="./hydro.v5.5.js"></script>
+  <script defer src="./app.v5.5.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -78,11 +79,14 @@
       <div id="historicLayerInfo" class="hint" hidden>Historische Karte und hochgeladene Bilder sind im Modus „Historisch“ verfügbar.</div>
       <label class="fieldlabel hydroMode">Gewässerdarstellung
         <select id="waterDetail">
-          <option value="wichtig" selected>Hauptgewässer · generalisiert (empfohlen)</option>
-          <option value="alle">Alle Bäche · sehr detailliert</option>
+          <option value="wichtig" selected>Amtliche Ufer + ausgewählte Bäche (empfohlen)</option>
+          <option value="alle">Detailliertes Gewässernetz (alle Bäche)</option>
         </select>
-        <small>swissTLMRegio reduziert Kleingewässer. Eine exakte Auswahl von 20 Bächen erfordert zusätzlich eine Vektordaten-Auswertung.</small>
+        <small>Hauptgewässer: präzise Seeufer und benannte Bachläufe aus amtlichen Vektordaten. Fallback: swissTLM3D mit zusätzlichen Rinnsalen.</small>
       </label>
+      <label class="button ghost inputlabel" for="hydroFile" style="display:block;margin-top:8px;font-size:12px">↑ Amtliche Gewässer-GeoJSON laden (optional)</label>
+      <input id="hydroFile" type="file" accept=".geojson,.json,application/geo+json,application/json" hidden>
+      <p id="hydroStatus" class="hint" role="status">Gewässer-Geodaten werden beim Einschalten geprüft.</p>
       <p class="lightHint"><span aria-hidden="true">◩</span> Ohne Luftbild und Landeskarte: <strong>Relief weiss beleuchten</strong> – ausserhalb des Reliefs bleibt die Projektion schwarz.</p>
       <div class="subheading topgap">Hochgeladene Kartenbilder</div>
       <div id="uploadLayerList" class="layerlist uploadlist"></div>
@@ -125,7 +129,7 @@
       <div id="previewFrame" class="previewframe">
         <div id="previewWhite" class="mapWhite" hidden></div>
         <div id="previewTiles" class="previewTiles" hidden></div>
-        <div id="previewHydro" class="hydroOverlay" hidden></div>
+        <div id="previewHydro" class="preciseHydro" hidden></div>
         <div id="emptyPreview" class="emptyPreview">
           <span>◈</span>
           <strong>Projekt laden</strong>
@@ -160,7 +164,7 @@
   <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClip" clipPathUnits="objectBoundingBox"><path id="municipalPath" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
   <div id="projectionWhite" class="mapWhite projectionWhite" hidden></div>
   <div id="projectionTiles" class="projectionTiles"></div>
-  <div id="projectionHydro" class="hydroOverlay projectionHydro" hidden></div>
+  <div id="projectionHydro" class="preciseHydro projectionHydro" hidden></div>
   <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" hidden>
     <polygon id="outline" points="" fill="none" stroke="#f3f9ee" stroke-width="2.5" stroke-dasharray="8 8" vector-effect="non-scaling-stroke"></polygon>
   </svg>
