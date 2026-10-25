@@ -1,8 +1,8 @@
-# Fehlerkorrektur v5.1
+# Fehlerkorrektur v5.2
 
-**Behebt die Meldung `Core.whiteReliefBackground is not a function`.** Die vorherige ZIP enthält die Funktion bereits, die Ursache war daher vermutlich ein Versionskonflikt zwischen zwischengespeicherten GitHub-Pages-Dateien der Versionen 4 und 5 (`app.js` neuer, `core.js` älter). Diese Version verwendet eindeutige Dateinamen `core.v5.1.js` und `app.v5.1.js` sowie eine explizite Versionsprüfung. Die Weissfläche wird ausserdem unabhängig von Core berechnet.
+**Behebt die Meldung `Core.whiteReliefBackground is not a function`.** Die vorherige ZIP enthält die Funktion bereits, die Ursache war daher vermutlich ein Versionskonflikt zwischen zwischengespeicherten GitHub-Pages-Dateien der Versionen 4 und 5 (`app.js` neuer, `core.js` älter). Diese Version verwendet eindeutige Dateinamen `core.v5.2.js` und `app.v5.2.js` sowie eine explizite Versionsprüfung. Die Weissfläche wird ausserdem unabhängig von Core berechnet.
 
-**Aktualisierung:** Alle Dateien dieses ZIP-Pakets ins Stammverzeichnis des GitHub-Repositories hochladen, einschliesslich der neuen JS-/CSS-Dateien. `index.html` überschreiben. Dann im Browser **Strg+F5** drücken (unter Mac `Cmd+Shift+R`). Nicht nur `app.v5.1.js` ersetzen.
+**Aktualisierung:** Alle Dateien dieses ZIP-Pakets ins Stammverzeichnis des GitHub-Repositories hochladen, einschliesslich der neuen JS-/CSS-Dateien. `index.html` überschreiben. Dann im Browser **Strg+F5** drücken (unter Mac `Cmd+Shift+R`). Nicht nur `app.v5.2.js` ersetzen.
 
 Alle Funktionen aus v5 bleiben bestehen.
 
@@ -50,8 +50,7 @@ Im Startmenü werden CSV-Dateien und Kartenbilder geladen, Modi und Jahre gewäh
 | Steuerung | Funktion |
 |---|---|
 | `H` | Zwischen Heute und Historisch wechseln |
-| `1`–`9` | Eine Karte anzeigen |
-| `Shift+1`–`Shift+9` | Zusätzliche Karte ein-/ausschalten |
+| `1`–`9` | Jeweilige Ebene unabhängig ein-/ausschalten (Mehrfachauswahl) |
 | `K` | Vier verschiebbare Kalibrierungsecken ein-/ausblenden |
 | `T` | Seitenleiste ausblenden/einblenden |
 | `PageUp` / `PageDown` | Weitere Karten aufrufen |
@@ -73,9 +72,9 @@ Die vier Ecken `NW/NE/SE/SW` lassen sich mit der Maus oder Pfeiltasten verschieb
 ## Technische Dateien
 
 - `index.html`: Startseite und schmale Projektorleiste
-- `style.v5.1.css`: Layout
-- `core.v5.1.js`: CSV-Parsing, Zeitreise-WMS-URL, LV95-Geometrie, Perspektive, ZIP
-- `app.v5.1.js`: Modi, Jahreswahl, Gemeinde-Maske, Kartenladefunktion, UI, Bildexport
+- `style.v5.2.css`: Layout
+- `core.v5.2.js`: CSV-Parsing, Zeitreise-WMS-URL, LV95-Geometrie, Perspektive, ZIP
+- `app.v5.2.js`: Modi, Jahreswahl, Gemeinde-Maske, Kartenladefunktion, UI, Bildexport
 - `examples/layout.csv`: Beispiel-Relief
 - `tests/core.test.js`: Node.js Unit-Tests (nur für Entwickler)
 - `tests/browser_v5.py`: reproduzierbarer Chromium-Test mit simulierten WMS- und Grenzdaten (nur für Entwickler)
@@ -85,3 +84,15 @@ Die vier Ecken `NW/NE/SE/SW` lassen sich mit der Maus oder Pfeiltasten verschieb
 - **Kernlogik:** CSV, WMS-URLs, Zeitparameter, Polygone, Homographie, ZIP.
 - **Chromium:** CSV laden, aktuelle Karte, Gemeinde-Maske über simulierte amtliche API-Antwort, Historisch 1900/1880/1890, Projektormodus, H-Taste, Eckmarkierungen, zurück zum Menü, PNG mit weissem Hintergrund und korrekt ausgeblendeten Bildteilen.
 - **Noch nicht live validiert:** echte WMS-Ausgaben für gewünschte historische Jahre, CORS-Berechtigungen und direkter Grenzabruf auf einer öffentlich gehosteten GitHub-Pages-Seite. Ebenfalls keine Prüfung am physischen Projektor.
+
+## Version 5.2 – Mehrfachauswahl und Wald
+
+- **1–8**: bisherige Ebenen (Luftbild, Gewässer, Verkehrswege, Gemeinden, Siedlungen, Orte, Bauten, Landeskarte).
+- **9**: Waldflächen (swissTLM3D Wald).
+- Ein Tastendruck oder Klick auf eine Kartenkachel schaltet **nur diese Ebene** um. Kein Shift mehr nötig. Mehrfachauswahl funktioniert gleichzeitig in der Startansicht und im Projektor.
+- Beispiel: **2 + 6** zeigt Gewässer und Ortsnamen, **3 + 7 + 9** Verkehrswege, Bauten und Wald.
+- Hintergründe zuerst: Luftbild oder Landeskarte liegen unter transparenten Ebenen, insbesondere Text und Gewässer sind nicht verdeckt. Bei zugleich aktivem Luftbild und Landeskarte ist die Landeskarte sichtbar über dem Luftbild.
+- Wenn weder Landeskarte noch Luftbild eingeschaltet ist, bleibt der Reliefhintergrund weiss; der Projektor ausserhalb des Reliefs schwarz.
+- Hochgeladene Zusatzbilder sind auf weiteren Kartenseiten über PageUp/PageDown erreichbar. Auch diese sind per Taste unabhängig schaltbar.
+
+Die Waldflächen stammen aus dem offiziellen WMS-Layer `ch.swisstopo.swisstlm3d-wald`.
