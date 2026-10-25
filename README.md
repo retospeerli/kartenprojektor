@@ -1,36 +1,28 @@
-# Grossrelief-Kartenprojektor 5.9.2 – Korrektur der Gewässergeometrie
+# Grossrelief-Kartenprojektor v5.9.3
 
-Diese Version übernimmt die Programmfunktionen und **die strikte Gewässer-Positivliste** aus 5.9.1 unverändert.
+Ausgangsbasis: **v5.9.2**, ohne sonstige Änderungen am Karten-/Projektor-Layout.
 
-**Zugelassene Fliessgewässer (keine weiteren):**
-Zopfbach; Gulmenbach; Töbelibach; Untermosenbach; Reidbach/Riedbach/Wildbach; Teufenbach; Sihl; Krebsbach (ausdrücklich nicht Chrebsbach); Schlossbach; Sagenbach; Miesbach; Aabach; Meilibach; Mülibach Richterswil (Gewässernummer 2512).
+## Ausschliesslich diese Änderungen
 
-**Zugelassene Weiher (keine weiteren):** Sternenweiher, Reidbachweiher/Riedbachweiher, Teufenbachweiher.
+- Untertitel direkt unter **GROSSRELIEF**: `GitHub Pages · Kartenprojektor v5.9.3`.
+- Drei gezielt gewünschte Weiher als Wasserflächen: **Teufenbachweiher**, **Aabachweiher**, **Sternenweiher**.
+- Der bestehende Datensatz GIS-ZH **45.10** wird unverändert verwendet. Da Wasserrechtsweiher dort ausgenommen sein können, wird ergänzend **GIS-ZH 51.1** (`WB_WASSERRECHTE_F`) abgefragt – ausschliesslich für diese drei benannten Weiher.
+- Schreibweisen `-weiher`/`-weier` sind nur für diese drei Gewässer zugelassen.
 
-**Zugelassene Seen (keine weiteren):** Zürichsee, Hüttenersee/Hüttnersee, Ausee.
+Alle anderen Wasserrechte, namenlose Weiher und Bäche werden **nicht gezeichnet**. Es wird keine zusätzliche allgemeine Gewässerkarte zugeschaltet. Die bestehende v5.9.2-Positivliste samt Reidbachweiher und Seen bleibt erhalten.
 
-## Einzige fachliche Korrekturen
+Die von v5.9.2 unveränderten Funktionen umfassen Mehrfachauswahl 1–9, Kalibrierung, Kartenlayer, Weissbeleuchtung, Export, historische Karten und Gewässerfilter.
 
-- Die bei 5.9.1 **über die Seefläche laufenden, geraden Bachlinien** werden geometrisch an der amtlichen Ufergrenze der zugelassenen Wasserflächen abgeschnitten. Die Quellgeometrie wird nicht verlängert oder durch selbst gezeichnete Verbindungslinien ergänzt.
-- Der Mülibach Richterswil wird bei der Namenszuordnung **nur mit der bestätigten Nummer 2512** berücksichtigt, um andere Mülibäche auszuschliessen.
-- Keine Änderungen an Tastatur, Layer-Reihenfolge, Projektor, Kalibrierung, Gestaltung, Export, Modus Heute/Historisch oder WFS-Datenquellen. Es bleibt bei 45.2, 45.3, 45.10 und 45.13; kein ungefiltertes Gewässernetz.
+## Hinweise zur Verifizierung
 
-Die Verkürzung erfolgt zentral **vor dem SVG-/PNG-Rendering**, gilt daher auch für die Projektion und den Export. Bei völlig im See liegenden Bachlinien wird gar keine Bachlinie dargestellt.
-
-## Was noch überprüft werden muss
-
-Die Zürcher Geodaten lassen sich in dieser Entwicklungsumgebung nicht live laden. Der örtliche Test auf deiner GitHub-Seite ist deshalb nötig. Ein Gewässer, dessen amtliche Geometrie nicht geliefert wird, bleibt weiterhin fehlend – die Anwendung erfindet keine Koordinaten. Insbesondere ist die Sihl ausserhalb des Zürcher Datensatzbereichs damit noch nicht durchgehend garantiert.
+Die einzelnen WFS-GeoJSON-Features können hier nicht live abgefragt werden. Es werden nur tatsächlich mit dem offiziellen Weihernamen gelieferte amtliche Polygone gezeichnet. Sollte GIS-ZH 51.1 nicht über den allgemeinen WFS verfügbar sein, bleibt der jeweils fehlende Weiher unsichtbar; es werden keine Flächen erfunden.
 
 ## GitHub Pages
 
-Den Inhalt dieses ZIP ins Stammverzeichnis des bestehenden Repositories hochladen, `index.html` ersetzen, committen und die Seite mit Strg+F5 neu laden. Die Dateinamen der Skripte und Styles wurden auf 5.9.2 aktualisiert, um Browser-Cache-Mischversionen zu vermeiden.
+ZIP entpacken, alle Dateien ins bestehende Repository-Verzeichnis hochladen, `index.html` ersetzen, committen und Strg+F5. Die Programmdateien sind eigenständig mit `v5.9.3` benannt.
 
 ## Tests
 
-`node tests/test_strict_v592.js`
+`node tests/test_ponds_v593.js`
 
-`node tests/test_shore_strict_v592.js`
-
-`python tests/test_strict_v592_browser.py`
-
-Browser-Tests verwenden ausdrücklich **simulierte** WFS-Antworten. Sie sind kein Nachweis vollständiger realer Wasserläufe.
+`python tests/test_ponds_v593_browser.py`
