@@ -1,28 +1,13 @@
-# Grossrelief-Kartenprojektor v5.9.3
+# Grossrelief-Kartenprojektor v5.9.4
 
-Ausgangsbasis: **v5.9.2**, ohne sonstige Änderungen am Karten-/Projektor-Layout.
+Basis: v5.9.3. **Ausschliesslich zwei Änderungen an Gewässerdaten:**
 
-## Ausschliesslich diese Änderungen
+1. **Reidbachweiher** wird zusätzlich ausdrücklich als benannte **Wasserfläche** aus dem bereits verwendeten kantonalen WFS-Layer `WB_WASSERRECHTE_F` (GIS-ZH 51.1) akzeptiert. Genau dieser Weiher – keine anderen neuen Weiher.
+2. **Krebsbach** wird ergänzend als namentlich **exakt Krebsbach** bezeichnete amtliche Linie aus überkantonalen Geodaten gesucht (swisstopo GeoAdmin; falls nicht verfügbar: amtlicher WFS Kanton Schwyz). Der Krebsbach fliesst vom Hüttnerseeli über Schwyz nach Bäch/Zürichsee. Der bisherige ZH-WFS erfasst seine Schwyzer Abschnitte nicht. **Chrebsbach** und andere Nebenbäche werden ausdrücklich ausgeschlossen. Amtliche Bachlinien werden nicht frei verlängert oder durch Seen gezeichnet.
 
-- Untertitel direkt unter **GROSSRELIEF**: `GitHub Pages · Kartenprojektor v5.9.3`.
-- Drei gezielt gewünschte Weiher als Wasserflächen: **Teufenbachweiher**, **Aabachweiher**, **Sternenweiher**.
-- Der bestehende Datensatz GIS-ZH **45.10** wird unverändert verwendet. Da Wasserrechtsweiher dort ausgenommen sein können, wird ergänzend **GIS-ZH 51.1** (`WB_WASSERRECHTE_F`) abgefragt – ausschliesslich für diese drei benannten Weiher.
-- Schreibweisen `-weiher`/`-weier` sind nur für diese drei Gewässer zugelassen.
+Die Datenquellen liefern im Browser unterschiedliche Verfügbarkeit. Wird der vollständige Verlauf nicht geliefert, zeigt die App nur tatsächlich belegte Teilstücke – **keine erfundenen Linien**. Live-Abfragen der externen Quellen sind in dieser Entwicklungsumgebung nicht prüfbar.
 
-Alle anderen Wasserrechte, namenlose Weiher und Bäche werden **nicht gezeichnet**. Es wird keine zusätzliche allgemeine Gewässerkarte zugeschaltet. Die bestehende v5.9.2-Positivliste samt Reidbachweiher und Seen bleibt erhalten.
-
-Die von v5.9.2 unveränderten Funktionen umfassen Mehrfachauswahl 1–9, Kalibrierung, Kartenlayer, Weissbeleuchtung, Export, historische Karten und Gewässerfilter.
-
-## Hinweise zur Verifizierung
-
-Die einzelnen WFS-GeoJSON-Features können hier nicht live abgefragt werden. Es werden nur tatsächlich mit dem offiziellen Weihernamen gelieferte amtliche Polygone gezeichnet. Sollte GIS-ZH 51.1 nicht über den allgemeinen WFS verfügbar sein, bleibt der jeweils fehlende Weiher unsichtbar; es werden keine Flächen erfunden.
+Alle übrigen Bach-/Weiherlisten und Kartenebenen bleiben identisch zu v5.9.3. Versionsnummer v5.9.4 auch im Untertitel. 
 
 ## GitHub Pages
-
-ZIP entpacken, alle Dateien ins bestehende Repository-Verzeichnis hochladen, `index.html` ersetzen, committen und Strg+F5. Die Programmdateien sind eigenständig mit `v5.9.3` benannt.
-
-## Tests
-
-`node tests/test_ponds_v593.js`
-
-`python tests/test_ponds_v593_browser.py`
+ZIP entpacken, gesamten Inhalt ins bestehende Repository hochladen. Dateien von v5.9.3 müssen nicht gelöscht werden, solange index.html v5.9.4 lädt. Nach Commit Strg+F5.
