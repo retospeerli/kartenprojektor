@@ -1,36 +1,21 @@
-# Grossrelief-Kartenprojektor v5.9.9 – isolierte Gewässerkorrektur
+# Grossrelief-Kartenprojektor v5.9.11
 
-**Ausgangsversion:** v5.9.5. Ausschliesslich Gewässer-Ladeprozess korrigiert.
+GitHub Pages – Installation: Alle Dateien und Unterordner des entpackten ZIPs im Repository hochladen, `index.html` ersetzen und Änderungen committen. Browser danach mit Strg + F5 aktualisieren.
 
-- Zürichsee/Seeflächen, Sihl und alle übrigen bereits bestätigten Wasserläufe werden direkt aus den ursprünglichen amtlichen Daten angezeigt.
-- Eine zusätzliche Krebsbachprüfung darf die Grundkarte **niemals** zurückhalten, leeren oder verändern. Sie läuft separat und darf nur den Krebsbach aktualisieren.
-- Eine zusätzliche nationale Anfrage darf nur **Sihl**-Geometrien anhand des exakten Namens ergänzen. Keine namenlosen Bachläufe und kein anderes Gewässer.
-- Keine synthetischen Sihl- oder Krebsbach-Verbindungen. Bei unvollständiger amtlicher Datenlage wird der fehlende Verlauf diagnostiziert, nicht erfunden.
-- UI, neun Tasten, Vier-Ecken-Kalibrierung, Export, bestehende Positivliste und alle übrigen Layer unverändert.
-- Exakte Programmversion im Seitentitel und Untertitel: **v5.9.9**.
+## Änderung gegenüber v5.9.9
 
-**Hinweis:** Reale Live-Antworten der Schweizer Kartendienste konnten im Ausführungssystem nicht abgerufen werden. Funktionstests mit lokalen Daten prüfen die Unabhängigkeit der Grundkarte und das Filterverhalten, nicht die geografische Vollständigkeit der externen Daten.
+**Ausschliesslich die Sihl-Datenbeschaffung** wurde korrigiert. Der bereits vorhandene Teil der Sihl und alle anderen Bäche, Seen, Weiher, Kartenebenen, Tastaturfunktionen, Projektor-Kalibrierung, Gemeinde-Maske und der Export bleiben unverändert.
 
+Bisher suchte die App Sihl-Teilstücke nach Namen im Zürcher und Schwyzer Gewässernetz. Das Ergebnis war entlang der Kantonsgrenze häufig unvollständig. Ab dieser Version benutzt die Sihl-Nachlieferung ausschliesslich den **schweizweiten Datensatz `ch.swisstopo.swisstlm3d-gewaessernetz`** der Bundesverwaltung. Dessen amtliche Attribute sind `name` und `gwl_nr` (Gewässernummer). Die App ermittelt zuerst die Gewässernummer der Sihl, danach liest sie im LV95-Korridor bis zum Ostrand auch diejenigen Teilstücke, bei denen der Name fehlt. Die Auswahl erfolgt ausschliesslich anhand des Namens **Sihl** bzw. der dafür ermittelten `gwl_nr`; sonstige Bäche werden verworfen.
 
-## v5.9.9 – ausschliesslich Sihl
-- Sihl hat eine eigene, deutlich kräftigere blaue Gewässersignatur, an der visuellen Hierarchie der Landeskarte 1:25’000 orientiert. Die bestehende Bach-Strichstärke aller anderen Gewässer bleibt unverändert.
-- Die Sihl-Linien aus amtlichen Quellen werden zusammen als Graph geometrisch untersucht. Nur wenn ein tatsächlich verbundener Sihl-Lauf zwei verschiedene Kartenränder erreicht, lautet die Diagnose „Sihl vollständig“. Die Linien werden exakt an den Rändern gekappt.
-- Ergänzende Sihl-Daten werden aus einem grösseren, ausschliesslich für die Sihl bestimmten geografischen Suchgebiet angefordert. Es werden keine fremden Gewässernetze eingeblendet.
-- Sind keine durchgehenden amtlichen Linien verfügbar, bleiben die bereits vorhandenen Sihl-Teilstücke gezeichnet. Die Einzelkontrolle meldet den fehlenden Kartenrand; es werden keine erfundenen Verbindungen gezogen.
-- Keine Änderung an Zürichsee, anderen Bächen und Weihern, Kartenbedienung oder Kalibrierung.
+Die Nachlieferung nutzt GeoAdmin `MapServer/find` (Namens- und Gewässernummer-Identifizierung) und `MapServer/identify` (raumbezogene Geometrien). Sie verwendet keine verwaltungsbezogene Kantonsgrenze. Bei Abfragegrenzen von 200 Objekten wird das Untersuchungsrechteck geteilt. Im Ergebnis werden ausschliesslich reale amtliche Koordinaten übernommen, keine Linien erfunden oder geschätzt. Der bestehende strikte GeoJSON-Clip am CSV-Kartenrand sowie die grössere blaue Sihl-Strichstärke bleiben unverändert.
 
+Für die Sihl erfolgt **kein Zugriff mehr auf den Schwyzer WFS**. Andere bereits vorhandene Datenabrufe (beispielsweise beim Krebsbach) sind davon nicht betroffen.
 
-## v5.9.9 – ausschliesslich Sihl im Kanton Schwyz
-- Amtliche Schwyzer Sihl-Geometrie zusätzlich über WFS `ch.sz.a041b.gewaessernetz.mwert` beziehen.
-- Nur ausdrücklich `Sihl` benannte Segmente und weitere Segmente derselben amtlichen Sihl-Routen-ID; alle anderen Gewässer ausschliessen.
-- Im geprüften Gesamtverlauf ist das Erreichen des **östlichen Kartenrandes** zwingend.
-- Die bestehende kräftige Sihl-Strichstärke, Zürichsee, alle anderen Bäche, Weiher und übrige Kartenebenen bleiben unverändert.
-- Keine Erfindung fehlender Gewässergeometrien: Bei fehlender Ost-Verbindung bleiben existierende Linien sichtbar, und die Diagnose meldet die verbleibende Lücke.
-- Amtlicher Schwyzer WFS: https://wfs.geo.sz.ch – Funktion im Live-Browser prüfen.
+## Tests
 
+- `node tests/sihl_national_5911.test.js`
+- `python tests/browser_national_5911.py`
+- Weitere Regressionstests zu den unveränderten Gewässern in `tests/`
 
-### v5.9.9 – Sihl, Schwyzer Hauptlauf
-- Nur die Sihl geändert. Fehlende Schwyzer Achsenteile können trotz fehlendem Namensattribut durch topologischen Anschluss an den bereits amtlich als Sihl identifizierten Lauf ausgewählt werden.
-- Am Ostrand muss eine echte Liniengeometrie enden; keine langen Geraden, keine anderen namentlich bekannten Bäche.
-- Verwendet weiterhin ausschliesslich amtliche Zürcher/Schwyzer Linien und die Schweizer swisstopo-Sihl-Suche. Alle anderen Gewässer und Layer bleiben unverändert.
-- ACHTUNG: Testdaten sind simuliert, eine volle Live-Verifikation ist weiterhin erforderlich.
+**Prüfstand:** Die Programm- und Browsertests haben simulierte offizielle GeoAdmin-Antworten verwendet. Ein Abruf der tatsächlichen GeoAdmin-Geometrien aus dieser Ausführungsumgebung war nicht möglich. Deshalb ist die vollständige Sihl auf der veröffentlichten Website noch nicht live nachgewiesen.
