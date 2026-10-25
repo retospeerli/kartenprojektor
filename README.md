@@ -1,4 +1,10 @@
-# Grossrelief-Kartenprojektor v5.9 — STRIKTE Positivliste
+## Fehlerkorrektur v5.9.1
+
+Der kantonale WFS führt reale Ebenen mit Präfix wie `ms:ogd-0045_giszhpub_wb_gewaesserbezeichnung_l`. Version 5.9 erwartete nur `WB_GEWAESSERBEZEICHNUNG_L` und erkannte darum keine Gewässer. Diese Zuordnung wurde berichtigt, mit strikter Unterscheidung von 45.1 und 45.2.
+
+**Unverändert:** ausschliesslich dieselbe Positivliste mit bereits ausdrücklich verlangten Gewässern, keine weiteren Datenquellen, keine zusätzlichen Bäche/Weiher, keine allgemeinen Gewässer-WMS oder zusätzlichen Fallbacks. Kartenlayout, Tasten, Projektion und Exporte unverändert. Der Live-WFS konnte hier nicht direkt geprüft werden; Tests benutzen die tatsächlichen Namen der amtlichen WFS-Ebenen und simulierte Geometrien.
+
+# Grossrelief-Kartenprojektor v5.9.1 — STRIKTE Positivliste
 
 **Zweck:** Die Kartenebene «Gewässer» zeichnet ausschliesslich die vom Nutzer ausdrücklich gewünschten Wasserläufe, Weiher und Seen.
 
