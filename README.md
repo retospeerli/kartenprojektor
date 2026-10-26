@@ -38,10 +38,19 @@ hochladen und nach dem Commit mit Strg+F5 laden.
 - Keine anderen Karten-/Gewässer-/Höhenkorrektur-Funktionen verändert.
 
 
-## v5.9.16 – automatische Standard-STLs / netzlinienfreie 3D-Projektion
+## v5.9.17 – automatische Standard-STLs / netzlinienfreie 3D-Projektion
 
 - Nach dem Laden von `layout.csv` lädt die App standardmässig automatisch die dazugehörigen STL-Dateien aus `./stl/` (mit CSV-Dateinamen). Optional `./stl/relief.stl` für das Gesamtmodell. Keine wiederholte manuelle STL-Auswahl.
 - Fehlende STL-Dateien ändern nichts an der übrigen App; in dem Fall bleibt die 2D-Projektion aktiv. Der manuelle STL-Import bleibt verfügbar.
 - 3D-Bild wird möglichst als durchgehend texturierte WebGL-Fläche ohne Dreiecksnähte erzeugt; falls WebGL fehlt, reduziert ein nahtüberdeckender Canvas-Fallback sichtbare Dreiecksgrenzen. Es werden **keine Gitternetzlinien gezeichnet**.
 - Standard-Projektorhöhe 105 cm, Kalibrierungskreise und gelbe/rote Fadenkreuze unverändert.
 - Keine Änderungen an Gewässern, Kartenebenen und deren Bedienung.
+
+
+## v5.9.17 – kleine Standard-Höhendatei statt grosser STL auf GitHub
+
+GitHub-Browser erlaubt keine STL-Dateien über 25 MiB. Die Anwendung kann deshalb die Original-STLs **lokal** laden und mit einem Knopf das bereits berechnete 3D-Höhenraster (`relief-heightmap.json`) speichern. Es enthält genau die Höhenauflösung, die der bestehende 3D-Renderer ohnehin benutzt (54 × proportional viele Rasterzellen). Die Datei ist normalerweise nur wenige Dutzend KB gross.
+
+Die Datei einmal nach `stl/relief-heightmap.json` ins Repository hochladen. Danach lädt die App sie nach dem CSV-Upload automatisch. Das Höhenmodell ist an den exakten LV95-Ausschnitt und die physischen Reliefabmessungen gekoppelt; die App verwirft fremde Höhenraster statt sie falsch zu projizieren. Wenn kein Höhenraster existiert, gilt weiterhin der bisherige STL-Fallback bzw. 2D-Modus.
+
+Alle Gewässer, Kartenlayer, Kalibrierhilfen und Projektorhöhe bleiben unverändert.

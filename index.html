@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.9.16</title>
-  <link rel="stylesheet" href="./style.v5.9.16.css">
-  <script defer src="./core.v5.9.16.js"></script>
-  <script defer src="./hydro.v5.9.16.js"></script>
-  <script defer src="./terrain.v5.9.16.js"></script>
-  <script defer src="./app.v5.9.16.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.9.17</title>
+  <link rel="stylesheet" href="./style.v5.9.17.css">
+  <script defer src="./core.v5.9.17.js"></script>
+  <script defer src="./hydro.v5.9.17.js"></script>
+  <script defer src="./terrain.v5.9.17.js"></script>
+  <script defer src="./app.v5.9.17.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -16,7 +16,7 @@
   <aside class="sidebar">
     <header class="identity">
       <div class="brandmark">◈</div>
-      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.16</span></div>
+      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.17</span></div>
     </header>
 
     <h1>CSV laden<br><em>oder Kartenbilder wiederverwenden.</em></h1>
@@ -76,9 +76,10 @@
           <input id="projectorHeight" type="number" value="105" min="20" max="500" step="1" inputmode="decimal">
         </label>
         <p class="hint">Standard: Die App lädt STL-Dateien automatisch aus <code>stl/</code> im GitHub-Repository. Dateinamen gemäss <code>layout.csv</code>, alternativ ein Gesamtmodell <code>stl/relief.stl</code>.</p>
-        <label class="filetarget compact" for="terrainFiles"><strong>Andere Relief-STL auswählen</strong><small>Optional: Komplettes Relief oder sämtliche STL-Segmente manuell laden</small></label>
+        <label class="filetarget compact" for="terrainFiles"><strong>STL-Dateien einmal lokal laden</strong><small>Komplettes Relief oder sämtliche STL-Segmente – kein GitHub-Upload erforderlich</small></label>
         <input type="file" id="terrainFiles" accept=".stl" multiple hidden>
-        <p id="terrainStatus" class="hint" role="status">Nach dem CSV-Upload werden STL-Dateien automatisch aus stl/ geladen. Ohne STL bleibt 2D verfügbar.</p>
+        <button type="button" class="button secondary" id="exportHeightmap" disabled>↓ Kompaktes Höhenmodell für GitHub speichern</button>
+        <p id="terrainStatus" class="hint" role="status">Nach dem CSV-Upload wird zuerst stl/relief-heightmap.json geladen. Fehlt es, können STL-Dateien lokal eingelesen werden.</p>
       </div>
     </section>
 
