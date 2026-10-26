@@ -17,3 +17,15 @@ App keinen zusätzlichen Bogen.
 
 GitHub Pages: ZIP entpacken, Programmdateien ins bestehende Repository
 hochladen und nach dem Commit mit Strg+F5 laden.
+
+
+## Version 5.9.14 – Kalibrierung und optionale 3D-Projektion
+
+- Kreise bleiben als verschiebbare Kalibriergriffe. Gelbe Fadenkreuze mit langen Armen markieren die **eigentlichen** Kartenecken.
+- Kreis oder gelbes Kreuz auswählen, dann Pfeiltasten: **0,25 Bildschirmpixel**, Strg+Pfeil **0,1 px**, Umschalt+Pfeil **1 px**. Die Eckpunkte werden wie bisher gespeichert.
+- 3D-Modus ist optional. `layout.csv` laden, vollständiges STL oder **alle in `layout.csv` genannten STL-Segmente** importieren. Dateinamen und physische Grössen müssen übereinstimmen. STL-Einheiten: mm; Y-Achse zeigt nach Norden. STL-Daten bleiben im Browser.
+- `H` (Projektorhöhe zur Grundplatte) standardmässig **105 cm**, im Hauptmenü 20–500 cm einstellbar.
+- Die Höhen werden als Raster aus der **oberen STL-Oberfläche** abgeleitet. Die 2D-Eckkalibrierung bleibt aktiv; das Raster kompensiert zusätzlich den veränderten Projektionsmassstab auf Höhen.
+- Geometrisches Modell: zentrale Projektion, Linse **senkrecht mittig über Relief**. Bei seitlicher/off-axis Projektorposition ist eine Kamera-Extrinsik-Kalibrierung zusätzlich nötig; die Korrektur ist sonst eine Näherung.
+- Kein Höhenmodell oder fehlende Teile: 3D bleibt aus; 2D funktioniert unverändert. Keine Veränderung am Gewässercode.
+- In der Kalibrierungs-JSON werden die Höhe und Moduswahl gespeichert, nicht die STL-Dateien. Nach Laden einer JSON-Datei müssen lokale STL-Dateien erneut importiert sein.
