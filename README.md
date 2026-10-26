@@ -29,3 +29,19 @@ hochladen und nach dem Commit mit Strg+F5 laden.
 - Geometrisches Modell: zentrale Projektion, Linse **senkrecht mittig über Relief**. Bei seitlicher/off-axis Projektorposition ist eine Kamera-Extrinsik-Kalibrierung zusätzlich nötig; die Korrektur ist sonst eine Näherung.
 - Kein Höhenmodell oder fehlende Teile: 3D bleibt aus; 2D funktioniert unverändert. Keine Veränderung am Gewässercode.
 - In der Kalibrierungs-JSON werden die Höhe und Moduswahl gespeichert, nicht die STL-Dateien. Nach Laden einer JSON-Datei müssen lokale STL-Dateien erneut importiert sein.
+
+
+## v5.9.15 – festes Bildschirm-Zielkreuz
+- Im Projektor per **K** oder **Ecken** den Kalibriermodus aktivieren: zusätzlich zu allen bisherigen gelben Eckfadenkreuzen und runden Griffen erscheint ein **rotes Kreuz exakt in der Vollbildmitte**.
+- Das rote Kreuz bleibt ortsfest, während die vier Ecken verschoben oder die Karten verzerrt werden.
+- **K** erneut oder Rückkehr zum Menü blendet das Kreuz aus; im normalen Projektormodus bleibt es unsichtbar.
+- Keine anderen Karten-/Gewässer-/Höhenkorrektur-Funktionen verändert.
+
+
+## v5.9.16 – automatische Standard-STLs / netzlinienfreie 3D-Projektion
+
+- Nach dem Laden von `layout.csv` lädt die App standardmässig automatisch die dazugehörigen STL-Dateien aus `./stl/` (mit CSV-Dateinamen). Optional `./stl/relief.stl` für das Gesamtmodell. Keine wiederholte manuelle STL-Auswahl.
+- Fehlende STL-Dateien ändern nichts an der übrigen App; in dem Fall bleibt die 2D-Projektion aktiv. Der manuelle STL-Import bleibt verfügbar.
+- 3D-Bild wird möglichst als durchgehend texturierte WebGL-Fläche ohne Dreiecksnähte erzeugt; falls WebGL fehlt, reduziert ein nahtüberdeckender Canvas-Fallback sichtbare Dreiecksgrenzen. Es werden **keine Gitternetzlinien gezeichnet**.
+- Standard-Projektorhöhe 105 cm, Kalibrierungskreise und gelbe/rote Fadenkreuze unverändert.
+- Keine Änderungen an Gewässern, Kartenebenen und deren Bedienung.

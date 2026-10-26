@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.9.14</title>
-  <link rel="stylesheet" href="./style.v5.9.14.css">
-  <script defer src="./core.v5.9.14.js"></script>
-  <script defer src="./hydro.v5.9.14.js"></script>
-  <script defer src="./terrain.v5.9.14.js"></script>
-  <script defer src="./app.v5.9.14.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.9.16</title>
+  <link rel="stylesheet" href="./style.v5.9.16.css">
+  <script defer src="./core.v5.9.16.js"></script>
+  <script defer src="./hydro.v5.9.16.js"></script>
+  <script defer src="./terrain.v5.9.16.js"></script>
+  <script defer src="./app.v5.9.16.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -16,7 +16,7 @@
   <aside class="sidebar">
     <header class="identity">
       <div class="brandmark">◈</div>
-      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.14</span></div>
+      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.16</span></div>
     </header>
 
     <h1>CSV laden<br><em>oder Kartenbilder wiederverwenden.</em></h1>
@@ -75,9 +75,10 @@
         <label class="fieldlabel">Projektorhöhe über Reliefgrundplatte (cm)
           <input id="projectorHeight" type="number" value="105" min="20" max="500" step="1" inputmode="decimal">
         </label>
-        <label class="filetarget compact" for="terrainFiles"><strong>Relief-STL auswählen</strong><small>Komplettes Relief oder alle STL-Segmente gemäss layout.csv</small></label>
+        <p class="hint">Standard: Die App lädt STL-Dateien automatisch aus <code>stl/</code> im GitHub-Repository. Dateinamen gemäss <code>layout.csv</code>, alternativ ein Gesamtmodell <code>stl/relief.stl</code>.</p>
+        <label class="filetarget compact" for="terrainFiles"><strong>Andere Relief-STL auswählen</strong><small>Optional: Komplettes Relief oder sämtliche STL-Segmente manuell laden</small></label>
         <input type="file" id="terrainFiles" accept=".stl" multiple hidden>
-        <p id="terrainStatus" class="hint" role="status">Noch kein Höhenmodell geladen. Bisherige 2D-Projektion bleibt verfügbar.</p>
+        <p id="terrainStatus" class="hint" role="status">Nach dem CSV-Upload werden STL-Dateien automatisch aus stl/ geladen. Ohne STL bleibt 2D verfügbar.</p>
       </div>
     </section>
 
@@ -158,7 +159,7 @@
 
     <div class="instructions">
       <strong>Zielbild verzerren</strong>
-      <p>Mit <b>H</b> zwischen Heute und Historisch wechseln. Im Vollbild schaltet jede Taste <b>1–9</b> genau eine Kartenebene <b>ein oder aus</b>, ohne die anderen Ebenen zu verändern. <b>1 = Luftbild, 2 = Landeskarte, 3–9 = weitere Ebenen</b>. Mehrere Ebenen können gleichzeitig sichtbar sein. Mit <b>K</b> Kreise und gelbe Fadenkreuze an den Reliefecken einblenden. Das Kreuz markiert die präzise Zielecke; mit den <b>Pfeiltasten</b> bewegt man ein fokussiertes Kreuz um 0,25 Pixel (Strg: 0,1 Pixel, Umschalt: 1 Pixel). Mit der Maus ziehen, mit <b>T</b> die schmale Kartenleiste verbergen und mit <b>Esc</b> zur Startansicht zurückkehren.</p>
+      <p>Mit <b>H</b> zwischen Heute und Historisch wechseln. Im Vollbild schaltet jede Taste <b>1–9</b> genau eine Kartenebene <b>ein oder aus</b>, ohne die anderen Ebenen zu verändern. <b>1 = Luftbild, 2 = Landeskarte, 3–9 = weitere Ebenen</b>. Mehrere Ebenen können gleichzeitig sichtbar sein. Mit <b>K</b> Kreise und gelbe Fadenkreuze an den Reliefecken sowie das <b>feste rote Fadenkreuz exakt in der Bildschirmmitte</b> einblenden. Das Kreuz markiert die präzise Zielecke; mit den <b>Pfeiltasten</b> bewegt man ein fokussiertes Kreuz um 0,25 Pixel (Strg: 0,1 Pixel, Umschalt: 1 Pixel). Mit der Maus ziehen, mit <b>T</b> die schmale Kartenleiste verbergen und mit <b>Esc</b> zur Startansicht zurückkehren.</p>
     </div>
   </main>
 </div>
@@ -172,6 +173,8 @@
   <svg id="cornerLines" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" preserveAspectRatio="none" hidden>
     <polygon id="outline" points="" fill="none" stroke="#f3f9ee" stroke-width="2.5" stroke-dasharray="8 8" vector-effect="non-scaling-stroke"></polygon>
   </svg>
+  <!-- Festes rotes Zentrum: unabhängig von den beweglichen Kartenecken. -->
+  <div id="screenCenterCross" class="screenCenterCross" hidden aria-hidden="true"></div>
   <div id="crosshairs" class="crosshairs" hidden>
     <div class="cornerCross" data-index="0" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Nordwest feinjustieren"><span></span></div>
     <div class="cornerCross" data-index="1" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Nordost feinjustieren"><span></span></div>
