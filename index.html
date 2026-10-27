@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grossrelief · Kartenprojektor v5.9.17</title>
-  <link rel="stylesheet" href="./style.v5.9.17.css">
-  <script defer src="./core.v5.9.17.js"></script>
-  <script defer src="./hydro.v5.9.17.js"></script>
-  <script defer src="./terrain.v5.9.17.js"></script>
-  <script defer src="./app.v5.9.17.js"></script>
+  <title>Grossrelief · Kartenprojektor v5.9.18</title>
+  <link rel="stylesheet" href="./style.v5.9.18.css">
+  <script defer src="./core.v5.9.18.js"></script>
+  <script defer src="./hydro.v5.9.18.js"></script>
+  <script defer src="./terrain.v5.9.18.js"></script>
+  <script defer src="./app.v5.9.18.js"></script>
 </head>
 <body>
 <svg class="municipalSvg" width="0" height="0" aria-hidden="true"><defs><clipPath id="municipalClipGlobal" clipPathUnits="objectBoundingBox"><path id="municipalPathGlobal" fill-rule="evenodd" clip-rule="evenodd"></path></clipPath></defs></svg>
@@ -16,7 +16,7 @@
   <aside class="sidebar">
     <header class="identity">
       <div class="brandmark">◈</div>
-      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.17</span></div>
+      <div><strong>GROSSRELIEF</strong><span>GitHub Pages · Kartenprojektor v5.9.18</span></div>
     </header>
 
     <h1>CSV laden<br><em>oder Kartenbilder wiederverwenden.</em></h1>
@@ -75,7 +75,7 @@
         <label class="fieldlabel">Projektorhöhe über Reliefgrundplatte (cm)
           <input id="projectorHeight" type="number" value="105" min="20" max="500" step="1" inputmode="decimal">
         </label>
-        <p class="hint">Standard: Die App lädt STL-Dateien automatisch aus <code>stl/</code> im GitHub-Repository. Dateinamen gemäss <code>layout.csv</code>, alternativ ein Gesamtmodell <code>stl/relief.stl</code>.</p>
+        <p class="hint">Standard: Die App lädt zuerst das kleine Höhenmodell <code>stl/relief-heightmap.json</code>. Keine grossen STL-Dateien auf GitHub erforderlich. Projektorbild: waagerechtes Querformat, Karte und Gelände gemeinsam 90° im Uhrzeigersinn gedreht.</p>
         <label class="filetarget compact" for="terrainFiles"><strong>STL-Dateien einmal lokal laden</strong><small>Komplettes Relief oder sämtliche STL-Segmente – kein GitHub-Upload erforderlich</small></label>
         <input type="file" id="terrainFiles" accept=".stl" multiple hidden>
         <button type="button" class="button secondary" id="exportHeightmap" disabled>↓ Kompaktes Höhenmodell für GitHub speichern</button>
@@ -177,16 +177,16 @@
   <!-- Festes rotes Zentrum: unabhängig von den beweglichen Kartenecken. -->
   <div id="screenCenterCross" class="screenCenterCross" hidden aria-hidden="true"></div>
   <div id="crosshairs" class="crosshairs" hidden>
-    <div class="cornerCross" data-index="0" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Nordwest feinjustieren"><span></span></div>
-    <div class="cornerCross" data-index="1" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Nordost feinjustieren"><span></span></div>
-    <div class="cornerCross" data-index="2" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Südost feinjustieren"><span></span></div>
-    <div class="cornerCross" data-index="3" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz Südwest feinjustieren"><span></span></div>
+    <div class="cornerCross" data-index="0" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz oben links feinjustieren"><span></span></div>
+    <div class="cornerCross" data-index="1" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz oben rechts feinjustieren"><span></span></div>
+    <div class="cornerCross" data-index="2" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz unten rechts feinjustieren"><span></span></div>
+    <div class="cornerCross" data-index="3" tabindex="0" role="button" aria-label="Gelbes Fadenkreuz unten links feinjustieren"><span></span></div>
   </div>
   <div id="handles" class="handles" hidden>
-    <div class="handle" data-index="0" tabindex="0" aria-label="Nordwest-Ecke verschieben">NW</div>
-    <div class="handle" data-index="1" tabindex="0" aria-label="Nordost-Ecke verschieben">NE</div>
-    <div class="handle" data-index="2" tabindex="0" aria-label="Südost-Ecke verschieben">SE</div>
-    <div class="handle" data-index="3" tabindex="0" aria-label="Südwest-Ecke verschieben">SW</div>
+    <div class="handle" data-index="0" tabindex="0" aria-label="Obere linke Ecke verschieben">OL</div>
+    <div class="handle" data-index="1" tabindex="0" aria-label="Obere rechte Ecke verschieben">OR</div>
+    <div class="handle" data-index="2" tabindex="0" aria-label="Untere rechte Ecke verschieben">UR</div>
+    <div class="handle" data-index="3" tabindex="0" aria-label="Untere linke Ecke verschieben">UL</div>
   </div>
 
   <!-- Schmale Projektor-Leiste: nur Kartenwahl, Kalibrierung und zurück. -->
